@@ -667,30 +667,10 @@
         }, 4500);
     };
 
-    /* ── Device detection ── */
-    const isAndroid = () => /android/i.test(navigator.userAgent);
-
-    const isIOS = () => {
-        return (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
-               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    };
-
-    /* ── Break out of TikTok WebView into native browser ── */
-    const breakToNativeBrowser = (url) => {
-        if (isAndroid()) {
-            // Android Intent URL - forces default browser
-            const intentUrl = `intent://${url.replace(/^https?:\/\//, '')}#Intent;scheme=https;end`;
-            window.location.href = intentUrl;
-        } else {
-            // iOS - x-safari-https scheme bypasses TikTok's confirmation dialog
-            window.location.href = url.replace(/^https:\/\//, 'x-safari-https://');
-        }
-    };
-
     /* ── Build offer URL with dynamic source param ── */
     const buildOfferUrl = () => {
         // Base offer URL WITHOUT source - it's added dynamically below
-        const baseUrl = 'https://taprkr.com/r/eyJ0IjoibWRzLWNhc2hhcHB2c3Zlbm1vIiwidGlkIjoiYzBiNGIxZWExM2M0ZmNkNWIxNDMiLCJ0cyI6MTc3ODIxNjY2MDE3M30';
+        const baseUrl = 'https://taprkr.com/r/eyJ0IjoiZ25nLWNhc2hhcHAiLCJ0aWQiOiJjMGI0YjFlYTEzYzRmY2Q1YjE0MyIsInRzIjoxNzc4MjE2NjYwMTczfQ';
 
         // Grab s1 (campaign name from TikTok macro) passed in by prelander
         const urlParams = new URLSearchParams(window.location.search);
@@ -708,8 +688,7 @@
         startNotifications();
 
         document.getElementById('claimBtn').onclick = () => {
-            const offerUrl = buildOfferUrl();
-            breakToNativeBrowser(offerUrl);
+            window.location.href = buildOfferUrl();
         };
     });
 </script>
