@@ -1,425 +1,717 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#000000">
-  <title>Cash Rewards</title>
-  <style>
-      :root {
-          --primary: #00D54B;
-          --gradient: linear-gradient(135deg, #00D54B, #00C344);
-          --card-bg: rgba(18, 18, 18, 0.95);
-          --text-primary: #ffffff;
-          --text-secondary: rgba(255, 255, 255, 0.7);
-          --step-bg: rgba(0, 213, 75, 0.1);
-          --border-color: rgba(0, 213, 75, 0.2);
-          --shadow: 0 10px 30px rgba(0, 213, 75, 0.15);
-      }
-      * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          -webkit-tap-highlight-color: transparent;
-          font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-      }
-      body {
-          background: #000000;
-          min-height: 100vh;
-          min-height: -webkit-fill-available;
-          padding: 16px;
-          color: var(--text-primary);
-          overflow-x: hidden;
-          padding-bottom: env(safe-area-inset-bottom);
-      }
-      html {
-          height: -webkit-fill-available;
-      }
-      .container {
-          max-width: 450px;
-          margin: 0 auto;
-          padding-bottom: 90px;
-          padding-left: env(safe-area-inset-left);
-          padding-right: env(safe-area-inset-right);
-      }
-      .header-card {
-          background: var(--card-bg);
-          border-radius: 24px;
-          padding: 60px 20px 20px;
-          box-shadow: var(--shadow);
-          margin-bottom: 16px;
-          border: 1px solid var(--border-color);
-          position: relative;
-          overflow: hidden;
-          margin-top: env(safe-area-inset-top);
-      }
-      .header-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 6px;
-          background: var(--gradient);
-      }
-      .logo {
-          width: 180px;
-          height: auto;
-          display: block;
-          margin: 0 auto 30px;
-          filter: drop-shadow(0 4px 6px rgba(0, 213, 75, 0.2));
-      }
-      .amount {
-          font-size: 64px;
-          font-weight: 800;
-          text-align: center;
-          background: var(--gradient);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          margin: 20px 0;
-          line-height: 1;
-          position: relative;
-      }
-      .amount::after {
-          content: 'Available Reward';
-          position: absolute;
-          bottom: -20px;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 14px;
-          font-weight: 500;
-          color: var(--text-secondary);
-          white-space: nowrap;
-      }
-      .stats {
-          display: flex;
-          gap: 12px;
-          margin: 30px 0 15px;
-      }
-      .stat-box {
-          flex: 1;
-          background: var(--step-bg);
-          padding: 16px;
-          border-radius: 16px;
-          text-align: center;
-          border: 1px solid var(--border-color);
-          min-height: 80px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-      }
-      .stat-value {
-          font-size: 24px;
-          font-weight: 700;
-          color: var(--primary);
-          margin-bottom: 4px;
-      }
-      .stat-label {
-          font-size: 14px;
-          color: var(--text-secondary);
-          font-weight: 500;
-      }
-      .steps-card {
-          background: var(--card-bg);
-          border-radius: 24px;
-          padding: 20px;
-          box-shadow: var(--shadow);
-          border: 1px solid var(--border-color);
-      }
-      .step {
-          display: flex;
-          align-items: center;
-          padding: 16px;
-          background: var(--step-bg);
-          border-radius: 16px;
-          margin-bottom: 16px;
-          border: 1px solid var(--border-color);
-          transition: transform 0.2s ease;
-      }
-      .step:last-child {
-          margin-bottom: 0;
-      }
-      .step-number {
-          width: 36px;
-          height: 36px;
-          background: var(--gradient);
-          color: white;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 600;
-          margin-right: 16px;
-          flex-shrink: 0;
-          box-shadow: 0 4px 10px rgba(0, 213, 75, 0.2);
-      }
-      .step-content h3 {
-          font-size: 16px;
-          margin-bottom: 4px;
-          color: var(--text-primary);
-      }
-      .step-content p {
-          font-size: 14px;
-          color: var(--text-secondary);
-          line-height: 1.4;
-      }
-      .claim-btn {
-          position: fixed;
-          bottom: max(20px, env(safe-area-inset-bottom));
-          left: 50%;
-          transform: translateX(-50%);
-          background: var(--gradient);
-          color: white;
-          border: none;
-          padding: 20px 32px;
-          border-radius: 20px;
-          font-weight: 700;
-          font-size: 16px;
-          box-shadow: 0 10px 30px rgba(0, 213, 75, 0.3);
-          max-width: calc(100% - 32px);
-          width: 450px;
-          cursor: pointer;
-          z-index: 100;
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-      }
-      .notification {
-          position: fixed;
-          top: max(20px, env(safe-area-inset-top));
-          left: 50%;
-          transform: translateX(-50%) translateY(-150%);
-          background: var(--card-bg);
-          padding: 18px 24px;
-          border-radius: 16px;
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          box-shadow: var(--shadow);
-          transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-          z-index: 100;
-          border: 1px solid var(--border-color);
-          width: calc(100% - 32px);
-          max-width: 400px;
-      }
-      .notification.show {
-          transform: translateX(-50%) translateY(0);
-      }
-      .notification img {
-          width: 32px;
-          height: 32px;
-      }
-      .notification-text {
-          font-size: 15px;
-          font-weight: 500;
-          color: var(--text-primary);
-      }
-      .pulse {
-          width: 10px;
-          height: 10px;
-          background: #00D54B;
-          border-radius: 50%;
-          margin-right: 8px;
-          position: relative;
-      }
-      .pulse::after {
-          content: '';
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          background: inherit;
-          border-radius: 50%;
-          animation: pulse 1.5s infinite;
-      }
-      @keyframes pulse {
-          0% { transform: scale(1); opacity: 1; }
-          100% { transform: scale(3); opacity: 0; }
-      }
-      .users-wrapper {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-      }
-      @media (hover: none) {
-          .step:hover {
-              transform: none;
-          }
-          .stat-box:hover {
-              transform: none;
-          }
-          .claim-btn:active {
-              transform: translateX(-50%) scale(0.98);
-          }
-      }
-      @media (max-width: 480px) {
-          .amount { 
-              font-size: 42px;
-          }
-          .logo {
-              width: 150px;
-          }
-          .step-content h3 {
-              font-size: 15px;
-          }
-          .step-content p {
-              font-size: 13px;
-          }
-          .header-card {
-              padding: 60px 20px 20px;
-          }
-      }
-      @media (max-width: 360px) {
-          .amount {
-              font-size: 36px;
-          }
-          .logo {
-              width: 130px;
-          }
-          .stat-value {
-              font-size: 20px;
-          }
-          .stat-label {
-              font-size: 12px;
-          }
-          .claim-btn {
-              font-size: 15px;
-              padding: 18px 24px;
-          }
-          .header-card {
-              padding: 50px 20px 20px;
-          }
-      }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>Cash Transfer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00D632;
+            --primary-dark: #00B82B;
+            --primary-glow: rgba(0, 214, 50, 0.25);
+            --secondary: #111111;
+            --card-bg: rgba(18, 18, 18, 0.97);
+            --glass-bg: rgba(0, 214, 50, 0.07);
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --border-color: rgba(0, 214, 50, 0.18);
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            --glow: 0 0 40px rgba(0, 214, 50, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(ellipse at 50% -10%, rgba(0, 214, 50, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 100% 100%, rgba(0, 214, 50, 0.05) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 30px 20px 110px;
+        }
+
+        /* ── Header Card ── */
+        .header-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 40px 25px 35px;
+            box-shadow: var(--shadow), var(--glow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            animation: fadeSlideUp 0.8s ease-out both;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .header-card::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 240px;
+            height: 240px;
+            background: radial-gradient(circle, rgba(0,214,50,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .logo-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: block;
+            animation: logoFloat 4s ease-in-out infinite;
+            box-shadow: 0 8px 30px rgba(0, 214, 50, 0.35);
+        }
+
+        .amount-wrapper {
+            position: relative;
+            margin: 10px 0 28px;
+            text-align: center;
+        }
+
+        .amount {
+            font-size: 80px;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            letter-spacing: -3px;
+            text-shadow: 0 0 40px rgba(0, 214, 50, 0.5);
+            animation: glowPulse 2.5s ease-in-out infinite;
+        }
+
+        .amount-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 12px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 30px;
+        }
+
+        .stat-box {
+            background: var(--glass-bg);
+            padding: 22px 16px;
+            border-radius: 18px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        /* ── Total Awarded Banner ── */
+        .awarded-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 26px 22px;
+            margin-top: 20px;
+            box-shadow: var(--shadow), var(--glow);
+            border: 1px solid var(--border-color);
+            animation: fadeSlideUp 0.9s ease-out both;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            text-align: center;
+        }
+
+        .awarded-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .digit-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            flex-wrap: nowrap;
+        }
+
+        .digit-symbol {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--primary);
+            text-shadow: 0 0 16px rgba(0, 214, 50, 0.5);
+            line-height: 1;
+        }
+
+        .digit-box {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            width: 38px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--primary);
+            text-shadow: 0 0 16px rgba(0, 214, 50, 0.5);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.4), 0 0 12px rgba(0,214,50,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .digit-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: rgba(255,255,255,0.04);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .digit-comma {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            text-shadow: 0 0 16px rgba(0, 214, 50, 0.5);
+            margin-bottom: 2px;
+        }
+
+        .awarded-sub {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 14px;
+            font-style: italic;
+            letter-spacing: 0.3px;
+        }
+
+        /* ── Steps Card ── */
+        .steps-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 28px 24px;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            animation: fadeSlideUp 1s ease-out both;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .steps-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            padding: 20px 18px;
+            background: var(--glass-bg);
+            border-radius: 16px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .step:last-child { margin-bottom: 0; }
+
+        .step:hover {
+            transform: translateY(-2px);
+            background: rgba(0, 214, 50, 0.1);
+            border-color: rgba(0, 214, 50, 0.3);
+        }
+
+        .step-number {
+            width: 42px;
+            height: 42px;
+            background: var(--primary);
+            color: #000000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            margin-right: 18px;
+            font-size: 17px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(0, 214, 50, 0.4);
+        }
+
+        .step-content h3 {
+            font-size: 17px;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .step-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 18px;
+            padding: 14px;
+            background: var(--glass-bg);
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+        }
+
+        .trust-badge span {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* ── Claim Button ── */
+        .claim-btn {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: #000000;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 18px;
+            max-width: calc(100% - 40px);
+            width: 480px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(0, 214, 50, 0.45);
+            letter-spacing: 0.3px;
+            z-index: 100;
+        }
+
+        .claim-btn:hover {
+            transform: translateX(-50%) translateY(-3px);
+            background: var(--primary-dark);
+            box-shadow: 0 12px 40px rgba(0, 214, 50, 0.55);
+        }
+
+        .claim-btn:active {
+            transform: translateX(-50%) translateY(0px);
+        }
+
+        /* ── Notification ── */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-160%);
+            background: #1a1a1a;
+            padding: 16px 18px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,214,50,0.2);
+            border: 1px solid rgba(0, 214, 50, 0.2);
+            width: calc(100% - 40px);
+            max-width: 420px;
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .notif-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .notif-icon img {
+            width: 44px;
+            height: 44px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .notif-body { flex: 1; }
+
+        .notif-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .notif-msg {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .notif-amount {
+            color: var(--primary);
+        }
+
+        .users-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .pulse {
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .pulse::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            border-radius: 50%;
+            animation: pulseRing 2s infinite;
+        }
+
+        @keyframes pulseRing {
+            0%   { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-12px); }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 40px rgba(0, 214, 50, 0.5); }
+            50%       { text-shadow: 0 0 70px rgba(0, 214, 50, 0.8); }
+        }
+
+        @keyframes digitFlip {
+            0%   { transform: translateY(-8px); opacity: 0; }
+            100% { transform: translateY(0);    opacity: 1; }
+        }
+
+        .digit-box.flip {
+            animation: digitFlip 0.4s ease-out;
+        }
+
+        @media (max-width: 420px) {
+            .amount      { font-size: 60px; letter-spacing: -2px; }
+            .logo        { width: 62px; height: 62px; }
+            .step-content h3 { font-size: 16px; }
+            .step-content p  { font-size: 13px; }
+            .claim-btn   { font-size: 16px; padding: 18px 28px; }
+            .stat-value  { font-size: 22px; }
+            .digit-box   { width: 32px; height: 46px; font-size: 26px; }
+            .digit-symbol, .digit-comma { font-size: 26px; }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-      <div class="header-card">
-          <img src="https://i.imgur.com/GA0UqAC.png" alt="Cash App" class="logo">
-          <div class="amount" id="amount">$0.00</div>
-          
-          <div class="stats">
-              <div class="stat-box">
-                  <div class="stat-value" id="timer">30:00</div>
-                  <div class="stat-label">Time Remaining</div>
-              </div>
-              <div class="stat-box">
-                  <div class="stat-value">
-                      <div class="users-wrapper">
-                          <div class="pulse"></div>
-                          <span id="users">143</span>
-                      </div>
-                  </div>
-                  <div class="stat-label">Active Users</div>
-              </div>
-          </div>
-      </div>
 
-      <div class="steps-card">
-          <div class="step">
-              <div class="step-number">1</div>
-              <div class="step-content">
-                  <h3>Quick Verification</h3>
-                  <p>Complete a brief verification process to ensure eligibility</p>
-              </div>
-          </div>
-          <div class="step">
-              <div class="step-number">2</div>
-              <div class="step-content">
-                  <h3>Confirm Details</h3>
-                  <p>Verify your account information for secure processing</p>
-              </div>
-          </div>
-          <div class="step">
-              <div class="step-number">3</div>
-              <div class="step-content">
-                  <h3>Get Rewarded</h3>
-                  <p>Receive your Cash App reward instantly after verification</p>
-              </div>
-          </div>
-      </div>
-  </div>
+<div class="container">
 
-  <button class="claim-btn" id="claimBtn">Claim Your Reward →</button>
+    <!-- ── Header Card ── -->
+    <div class="header-card">
+        <div class="logo-wrap">
+            <img src="https://i.imgur.com/fjBfl8X.png" alt="Cash App" class="logo">
+        </div>
 
-  <div class="notification" id="notification">
-      <img src="https://i.imgur.com/GA0UqAC.png" alt="Cash App">
-      <div class="notification-text"><span id="notifName"></span> just claimed $750!</div>
-  </div>
+        <div class="amount-wrapper">
+            <div class="amount" id="amount">$0.00</div>
+            <div class="amount-label">Available Balance</div>
+        </div>
 
-  <script>
-      const animateAmount = () => {
-          const el = document.getElementById('amount');
-          const final = 750;
-          const duration = 2000;
-          const steps = 60;
-          const increment = final / steps;
-          let current = 0;
-          let step = 0;
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-value" id="timer">15:00</div>
+                <div class="stat-label">Time Left</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">
+                    <div class="users-wrapper">
+                        <div class="pulse"></div>
+                        <span id="users">238</span>
+                    </div>
+                </div>
+                <div class="stat-label">Online Now</div>
+            </div>
+        </div>
+    </div>
 
-          const interval = setInterval(() => {
-              step++;
-              current = Math.min(final, step * increment);
-              el.textContent = '$' + current.toFixed(2);
-              if (current >= final) clearInterval(interval);
-          }, duration / steps);
-      };
+    <!-- ── Total Awarded Card ── -->
+    <div class="awarded-card">
+        <div class="awarded-title">Total Amount Awarded</div>
+        <div class="digit-row">
+            <span class="digit-symbol">$</span>
+            <div class="digit-box" id="d0">1</div>
+            <div class="digit-box" id="d1">4</div>
+            <div class="digit-box" id="d2">1</div>
+            <span class="digit-comma">,</span>
+            <div class="digit-box" id="d3">0</div>
+            <div class="digit-box" id="d4">0</div>
+            <div class="digit-box" id="d5">0</div>
+        </div>
+        <div class="awarded-sub">Enter below to continue towards your reward</div>
+    </div>
 
-      const startTimer = () => {
-          let time = 1800;
-          const timerEl = document.getElementById('timer');
-          
-          const interval = setInterval(() => {
-              time--;
-              const minutes = Math.floor(time / 60);
-              const seconds = time % 60;
-              timerEl.textContent = minutes.toString().padStart(2, '0') + ':' + 
-                                  seconds.toString().padStart(2, '0');
-              if (time <= 0) clearInterval(interval);
-          }, 1000);
-      };
+    <!-- ── Steps Card ── -->
+    <div class="steps-card">
+        <div class="steps-title">How It Works</div>
 
-      const updateUsers = () => {
-          const el = document.getElementById('users');
-          setInterval(() => {
-              const base = 143;
-              const variation = Math.floor(Math.random() * 10) - 5;
-              el.textContent = base + variation;
-          }, 2000);
-      };
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3>Verify Identity</h3>
+                <p>Quick $Cashtag verification process</p>
+            </div>
+        </div>
 
-      const names = [
-          'James R.', 'Emma S.', 'Liam K.', 'Olivia M.', 'Noah P.',
-          'Ava W.', 'Mason T.', 'Sophia L.', 'Lucas N.', 'Isabella F.'
-      ];
-      
-      const showNotification = (name) => {
-          const notif = document.getElementById('notification');
-          document.getElementById('notifName').textContent = name;
-          notif.classList.add('show');
-          setTimeout(() => notif.classList.remove('show'), 3000);
-      };
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3>Secure Transfer</h3>
+                <p>Confirm your details via Cash App</p>
+            </div>
+        </div>
 
-      const startNotifications = () => {
-          setInterval(() => {
-              const name = names[Math.floor(Math.random() * names.length)];
-              showNotification(name);
-          }, 5000);
-      };
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3>Instant Access</h3>
+                <p>Funds deposited to your Cash App balance</p>
+            </div>
+        </div>
 
-      document.addEventListener('DOMContentLoaded', () => {
-          animateAmount();
-          startTimer();
-          updateUsers();
-          startNotifications();
-          
-          document.getElementById('claimBtn').onclick = () => {
-              window.location.href = 'https://gloffers.org/aff_c?offer_id=3719&aff_id=23122'; // Replace with your actual affiliate link
-          };
-      });
-  </script>
+        <div class="trust-badge">
+            <span>🔒</span>
+            <span>256-bit encrypted · Instant transfer</span>
+        </div>
+    </div>
+
+</div>
+
+<button class="claim-btn" id="claimBtn">Claim Your $1,000 →</button>
+
+<div class="notification" id="notification">
+    <div class="notif-icon">
+        <img src="https://i.imgur.com/fjBfl8X.png" alt="Cash App">
+    </div>
+    <div class="notif-body">
+        <div class="notif-title">Cash App</div>
+        <div class="notif-msg"><span id="notifName"></span> just received <span class="notif-amount" id="notifAmount"></span>!</div>
+    </div>
+</div>
+
+<script>
+    /* ── Amount Counter $0 → $1,000.00 ── */
+    const animateAmount = () => {
+        const el = document.getElementById('amount');
+        const final = 1000;
+        const duration = 2000;
+        const steps = 60;
+        let step = 0;
+
+        const iv = setInterval(() => {
+            step++;
+            const current = Math.min(final, (final / steps) * step);
+            el.textContent = '$' + current.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            if (current >= final) clearInterval(iv);
+        }, duration / steps);
+    };
+
+    /* ── Countdown Timer ── */
+    const startTimer = () => {
+        let time = 900;
+        const el = document.getElementById('timer');
+        const iv = setInterval(() => {
+            time--;
+            const m = Math.floor(time / 60);
+            const s = time % 60;
+            el.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+            if (time <= 0) clearInterval(iv);
+        }, 1000);
+    };
+
+    /* ── Live Users ── */
+    const updateUsers = () => {
+        const el = document.getElementById('users');
+        setInterval(() => {
+            el.textContent = 230 + Math.floor(Math.random() * 20);
+        }, 2500);
+    };
+
+    /* ── Animated Total Awarded Counter ── */
+    const awardedDigits = ['1','4','1','0','0','0'];
+    const digitIds = ['d0','d1','d2','d3','d4','d5'];
+
+    const incrementAwarded = () => {
+        // Randomly bump last 3 digits to simulate live tracking
+        const randomBump = Math.floor(Math.random() * 3) + 1;
+        let val = parseInt(awardedDigits.join('')) + randomBump;
+        const str = val.toString().slice(0, 6).padStart(6, '0');
+        str.split('').forEach((ch, i) => {
+            if (ch !== awardedDigits[i]) {
+                const box = document.getElementById(digitIds[i]);
+                box.textContent = ch;
+                box.classList.remove('flip');
+                void box.offsetWidth;
+                box.classList.add('flip');
+                awardedDigits[i] = ch;
+            }
+        });
+    };
+
+    setInterval(incrementAwarded, 3800);
+
+    /* ── Random Notification Amount $250.xx – $999.xx ── */
+    const randomAmount = () => {
+        const dollars = Math.floor(Math.random() * (999 - 250 + 1)) + 250;
+        const cents   = Math.floor(Math.random() * 100);
+        return '$' + dollars + '.' + cents.toString().padStart(2, '0');
+    };
+
+    /* ── Notifications ── */
+    const names = [
+        'Michael S.', 'Sarah J.', 'David K.', 'Emily R.', 'Thomas M.',
+        'Jessica L.', 'Robert P.', 'Laura B.', 'William H.', 'Rachel N.',
+        'Christopher A.', 'Amanda W.', 'Daniel T.', 'Michelle C.', 'James D.',
+        'Keisha M.', 'Tyler B.', 'Jasmine W.', 'Marcus T.', 'Brittany F.'
+    ];
+
+    const showNotification = (name) => {
+        const notif = document.getElementById('notification');
+        document.getElementById('notifName').textContent = name;
+        document.getElementById('notifAmount').textContent = randomAmount();
+        notif.classList.add('show');
+        setTimeout(() => notif.classList.remove('show'), 3200);
+    };
+
+    const startNotifications = () => {
+        setTimeout(() => {
+            showNotification(names[Math.floor(Math.random() * names.length)]);
+        }, 2000);
+        setInterval(() => {
+            showNotification(names[Math.floor(Math.random() * names.length)]);
+        }, 4500);
+    };
+
+    /* ── Device detection ── */
+    const isAndroid = () => /android/i.test(navigator.userAgent);
+
+    const isIOS = () => {
+        return (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
+               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    };
+
+    /* ── Break out of TikTok WebView into native browser ── */
+    const breakToNativeBrowser = (url) => {
+        if (isAndroid()) {
+            // Android Intent URL - forces default browser
+            const intentUrl = `intent://${url.replace(/^https?:\/\//, '')}#Intent;scheme=https;end`;
+            window.location.href = intentUrl;
+        } else {
+            // iOS - x-safari-https scheme bypasses TikTok's confirmation dialog
+            window.location.href = url.replace(/^https:\/\//, 'x-safari-https://');
+        }
+    };
+
+    /* ── Build offer URL with dynamic source param ── */
+    const buildOfferUrl = () => {
+        // Base offer URL WITHOUT source - it's added dynamically below
+        const baseUrl = 'https://taprkr.com/r/eyJ0IjoiZ25nLWNhc2hhcHAiLCJ0aWQiOiJjMGI0YjFlYTEzYzRmY2Q1YjE0MyIsInRzIjoxNzc4MjE2NjYwMTczfQ';
+
+        // Grab s1 (campaign name from TikTok macro) passed in by prelander
+        const urlParams = new URLSearchParams(window.location.search);
+        const s1 = urlParams.get('s1') || 'no_subid';
+
+        // glctrk.org uses 'source' as the subID parameter (not 's1')
+        return baseUrl + '&source=' + encodeURIComponent(s1);
+    };
+
+    /* ── Init ── */
+    document.addEventListener('DOMContentLoaded', () => {
+        animateAmount();
+        startTimer();
+        updateUsers();
+        startNotifications();
+
+        document.getElementById('claimBtn').onclick = () => {
+            const offerUrl = buildOfferUrl();
+            breakToNativeBrowser(offerUrl);
+        };
+    });
+</script>
 </body>
 </html>
