@@ -676,7 +676,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const s1 = urlParams.get('s1') || 'no_subid';
 
-        return baseUrl + '&s1=' + encodeURIComponent(s1);
+        return baseUrl + '?s1=' + encodeURIComponent(s1);
     };
 
     /* ── Init ── */
