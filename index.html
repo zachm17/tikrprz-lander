@@ -1,695 +1,857 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
-    <title>Cash Transfer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #00D632;
-            --primary-dark: #00B82B;
-            --primary-glow: rgba(0, 214, 50, 0.25);
-            --secondary: #111111;
-            --card-bg: rgba(18, 18, 18, 0.97);
-            --glass-bg: rgba(0, 214, 50, 0.07);
-            --text-primary: #FFFFFF;
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --border-color: rgba(0, 214, 50, 0.18);
-            --shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-            --glow: 0 0 40px rgba(0, 214, 50, 0.2);
-        }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Get Paid to Game</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      background: #050508;
+      color: #fff;
+      overflow-x: hidden;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            font-family: 'Inter', -apple-system, sans-serif;
-        }
+    /* Background */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .bg-grad-1 {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 90% 45% at 50% 0%, rgba(74,222,128,0.12) 0%, transparent 65%);
+    }
+    .bg-grad-2 {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 55% 28% at 85% 95%, rgba(34,197,94,0.05) 0%, transparent 55%);
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: #4ade80;
+      opacity: 0.1;
+      animation: floatParticle 10s ease-in-out infinite;
+    }
+    @keyframes floatParticle {
+      0%, 100% { transform: translateY(-18px); opacity: 0.05; }
+      50% { transform: translateY(18px); opacity: 0.2; }
+    }
 
-        body {
-            background: #0a0a0a;
-            min-height: 100vh;
-            color: var(--text-primary);
-            overflow-x: hidden;
-            background-image:
-                radial-gradient(ellipse at 50% -10%, rgba(0, 214, 50, 0.12) 0%, transparent 60%),
-                radial-gradient(ellipse at 100% 100%, rgba(0, 214, 50, 0.05) 0%, transparent 50%);
-        }
+    /* Pages */
+    .page { display: none; position: relative; z-index: 1; }
+    .page.active { display: block; }
+    .page-inner {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 100px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .page2 .page-inner { padding-bottom: 168px; }
 
-        .container {
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 30px 20px 110px;
-        }
+    /* Notification Toast */
+    .notif-toast {
+      position: fixed;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-90px);
+      opacity: 0;
+      transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 18px;
+      max-width: 340px;
+      width: 94%;
+      background: rgba(7,9,15,0.97);
+      border: 1px solid rgba(74,222,128,0.24);
+      box-shadow: 0 6px 36px rgba(0,0,0,0.75);
+      backdrop-filter: blur(20px);
+      pointer-events: none;
+    }
+    .notif-toast.visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    .notif-icon {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .notif-icon img {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      object-fit: cover;
+      display: block;
+    }
+    .notif-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: #4ade80;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: 900;
+      color: #000;
+    }
+    .notif-body { flex: 1; min-width: 0; }
+    .notif-title { color: #fff; font-weight: 700; font-size: 12px; }
+    .notif-title span { color: #4ade80; }
+    .notif-sub { color: #9ca3af; font-size: 11px; margin-top: 1px; }
+    .notif-time { color: #6b7280; font-size: 11px; flex-shrink: 0; }
 
-        /* ── Header Card ── */
-        .header-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 40px 25px 35px;
-            box-shadow: var(--shadow), var(--glow);
-            border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
-            animation: fadeSlideUp 0.8s ease-out both;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
+    /* Logo */
+    .logo-wrap { margin-bottom: 22px; }
+    .logo-box {
+      width: 70px; height: 70px;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(74,222,128,0.5);
+      animation: logoPulse 2.8s ease-in-out infinite;
+    }
+    @keyframes logoPulse {
+      0%, 100% { box-shadow: 0 0 16px rgba(74,222,128,0.28); }
+      50% { box-shadow: 0 0 44px rgba(74,222,128,0.68); }
+    }
+    .logo-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        .header-card::before {
-            content: '';
-            position: absolute;
-            top: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 240px;
-            height: 240px;
-            background: radial-gradient(circle, rgba(0,214,50,0.12) 0%, transparent 70%);
-            pointer-events: none;
-        }
+    /* Headlines */
+    .headline { text-align: center; margin-bottom: 16px; }
+    .headline-white { font-size: 48px; font-weight: 900; color: #fff; line-height: 1.08; }
+    .headline-green {
+      font-size: 48px; font-weight: 900; line-height: 1.08;
+      background: linear-gradient(90deg, #4ade80, #86efac, #22c55e, #4ade80);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 4s linear infinite;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-        .logo-wrap {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
+    .subtitle {
+      color: #d1d5db;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.75;
+      margin-bottom: 22px;
+    }
+    .subtitle strong { color: #4ade80; }
+    .subtitle .muted { color: #6b7280; }
 
-        .logo {
-            width: 72px;
-            height: 72px;
-            border-radius: 20px;
-            display: block;
-            animation: logoFloat 4s ease-in-out infinite;
-            box-shadow: 0 8px 30px rgba(0, 214, 50, 0.35);
-        }
+    /* Stats row */
+    .stats-row {
+      display: flex;
+      width: 100%;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.07);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .stat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 8px;
+      background: rgba(255,255,255,0.03);
+      border-right: 1px solid rgba(255,255,255,0.07);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-icon { font-size: 20px; margin-bottom: 3px; }
+    .stat-value { color: #fff; font-weight: 800; font-size: 13px; }
+    .stat-label { color: #6b7280; font-size: 11px; }
 
-        .amount-wrapper {
-            position: relative;
-            margin: 10px 0 28px;
-            text-align: center;
-        }
+    /* Bonus card */
+    .bonus-card {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, rgba(74,222,128,0.10), rgba(34,197,94,0.04));
+      border: 1px solid rgba(74,222,128,0.32);
+    }
+    .bonus-emoji { font-size: 42px; animation: wiggle 1.6s ease-in-out infinite; }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      25% { transform: rotate(-14deg) scale(1.1); }
+      75% { transform: rotate(14deg) scale(1.1); }
+    }
+    .bonus-text { font-weight: 900; font-size: 22px; color: #4ade80; }
+    .bonus-sub { color: #9ca3af; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; }
 
-        .amount {
-            font-size: 80px;
-            font-weight: 800;
-            color: var(--primary);
-            line-height: 1;
-            letter-spacing: -3px;
-            text-shadow: 0 0 40px rgba(0, 214, 50, 0.5);
-            animation: glowPulse 2.5s ease-in-out infinite;
-        }
+    /* Age buttons */
+    .age-btn {
+      width: 100%;
+      border-radius: 18px;
+      padding: 18px 16px;
+      font-weight: 900;
+      font-size: 19px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      margin-bottom: 12px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .age-btn:active { transform: scale(0.97); }
+    .age-btn.primary {
+      color: #000;
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      box-shadow: 0 8px 28px rgba(74,222,128,0.36);
+      animation: btnPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 8px 28px rgba(74,222,128,0.36); }
+      50% { box-shadow: 0 8px 46px rgba(74,222,128,0.68); }
+    }
+    .age-btn.primary .btn-sub { font-size: 12px; font-weight: 500; color: rgba(0,0,0,0.58); }
+    .age-btn.secondary {
+      color: #fff;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+    .age-btn.secondary .btn-sub { font-size: 12px; font-weight: 500; color: #6b7280; }
 
-        .amount-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 12px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+    /* Live indicator */
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 26px;
+    }
+    .live-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: livePulse 1.4s ease-in-out infinite;
+    }
+    @keyframes livePulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.7); opacity: 0.3; }
+    }
+    .live-text { color: #d1d5db; font-size: 13px; }
+    .live-text strong { color: #fff; }
 
-        .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-top: 30px;
-        }
+    /* Cashout methods */
+    .cashout-section { width: 100%; margin-bottom: 26px; }
+    .cashout-label {
+      color: #6b7280;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .cashout-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .cashout-pill {
+      padding: 7px 16px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #d1d5db;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
 
-        .stat-box {
-            background: var(--glass-bg);
-            padding: 22px 16px;
-            border-radius: 18px;
-            text-align: center;
-            border: 1px solid var(--border-color);
-        }
+    /* Footer */
+    .footer-links {
+      color: #4b5563;
+      font-size: 11px;
+      display: flex;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .footer-links a { color: #4b5563; text-decoration: none; }
+    .footer-copy { color: #4b5563; font-size: 11px; }
 
-        .stat-value {
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
+    /* ═══════ PAGE 2 ═══════ */
+    .check-icon-wrap { margin-bottom: 20px; }
+    .check-icon {
+      width: 82px; height: 82px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: checkPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes checkPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+      50% { box-shadow: 0 0 0 14px rgba(74,222,128,0.18); }
+    }
+    .check-icon svg { width: 38px; height: 38px; }
 
-        .stat-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-        }
+    .page2 h1 {
+      font-size: 40px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 12px;
+      text-align: center;
+    }
 
-        /* ── Total Awarded Banner ── */
-        .awarded-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 26px 22px;
-            margin-top: 20px;
-            box-shadow: var(--shadow), var(--glow);
-            border: 1px solid var(--border-color);
-            animation: fadeSlideUp 0.9s ease-out both;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            text-align: center;
-        }
+    .paid-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: rgba(74,222,128,0.08);
+      border: 1px solid rgba(74,222,128,0.2);
+    }
+    .paid-badge-emoji { font-size: 20px; animation: bounce 1.4s ease-in-out infinite; }
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .paid-badge-text { font-weight: 800; font-size: 13px; color: #4ade80; }
 
-        .awarded-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
+    .page2 .subtitle { margin-bottom: 24px; }
 
-        .digit-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            flex-wrap: nowrap;
-        }
+    /* Stats cards */
+    .stats-cards {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 8px;
+      border-radius: 16px;
+      background: rgba(74,222,128,0.06);
+      border: 1px solid rgba(74,222,128,0.14);
+    }
+    .stat-card-icon { font-size: 20px; }
+    .stat-card-value { color: #fff; font-weight: 800; font-size: 13px; margin-top: 3px; }
+    .stat-card-label { color: #6b7280; font-size: 11px; }
 
-        .digit-symbol {
-            font-size: 30px;
-            font-weight: 800;
-            color: var(--primary);
-            text-shadow: 0 0 16px rgba(0, 214, 50, 0.5);
-            line-height: 1;
-        }
+    /* Activation card */
+    .activation-card {
+      width: 100%;
+      border-radius: 22px;
+      padding: 18px;
+      margin-bottom: 16px;
+      background: rgba(7,9,17,0.98);
+      border: 1px solid rgba(74,222,128,0.18);
+      box-shadow: 0 4px 50px rgba(74,222,128,0.05);
+    }
+    .activation-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .activation-header-emoji { font-size: 22px; }
+    .activation-header-text { font-weight: 800; color: #fff; font-size: 15px; }
+    .activation-badge {
+      padding: 3px 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      animation: badgePulse 1.8s ease-in-out infinite;
+    }
+    @keyframes badgePulse {
+      0%, 100% { opacity: 0.65; }
+      50% { opacity: 1; }
+    }
+    .activation-desc {
+      color: #d1d5db;
+      font-size: 14px;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+    .activation-desc .highlight {
+      color: #4ade80;
+      font-weight: 700;
+      animation: textPulse 1.6s ease-in-out infinite;
+    }
+    @keyframes textPulse {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+    .activation-desc strong { color: #4ade80; }
 
-        .digit-box {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 8px;
-            width: 38px;
-            height: 52px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            font-weight: 800;
-            color: var(--primary);
-            text-shadow: 0 0 16px rgba(0, 214, 50, 0.5);
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.4), 0 0 12px rgba(0,214,50,0.1);
-            position: relative;
-            overflow: hidden;
-        }
+    /* Pro tip */
+    .pro-tip {
+      border-radius: 14px;
+      padding: 14px;
+      background: linear-gradient(135deg, rgba(234,179,8,0.09), rgba(245,158,11,0.04));
+      border: 1px solid rgba(234,179,8,0.2);
+      animation: tipBorder 2.8s ease-in-out infinite;
+    }
+    @keyframes tipBorder {
+      0%, 100% { border-color: rgba(234,179,8,0.12); }
+      50% { border-color: rgba(234,179,8,0.48); }
+    }
+    .pro-tip-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .pro-tip-header span:first-child { font-size: 15px; animation: zap 0.9s ease-in-out infinite; }
+    @keyframes zap {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.4); }
+    }
+    .pro-tip-label {
+      color: #fbbf24;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .pro-tip-text {
+      color: #fde68a;
+      font-size: 12px;
+      line-height: 1.65;
+    }
+    .pro-tip-text strong { color: #fde68a; }
 
-        .digit-box::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: rgba(255,255,255,0.04);
-            border-radius: 8px 8px 0 0;
-        }
+    /* Steps card */
+    .steps-card {
+      width: 100%;
+      border-radius: 22px;
+      padding: 18px;
+      margin-bottom: 20px;
+      background: rgba(7,9,17,0.98);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .steps-label {
+      color: #6b7280;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .step + .step { margin-top: 20px; }
+    .step-num {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 14px;
+      color: #000;
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      box-shadow: 0 4px 14px rgba(74,222,128,0.4);
+    }
+    .step-content { flex: 1; }
+    .step-title-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .step-title-row span:first-child { font-size: 16px; }
+    .step-title { font-weight: 800; color: #fff; font-size: 14px; }
+    .step-desc { color: #6b7280; font-size: 12px; margin-top: 3px; }
 
-        .digit-comma {
-            font-size: 30px;
-            font-weight: 800;
-            color: var(--primary);
-            line-height: 1;
-            text-shadow: 0 0 16px rgba(0, 214, 50, 0.5);
-            margin-bottom: 2px;
-        }
+    /* Trust badges */
+    .trust-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    .trust-badge {
+      font-size: 12px;
+      color: #d1d5db;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
 
-        .awarded-sub {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 14px;
-            font-style: italic;
-            letter-spacing: 0.3px;
-        }
-
-        /* ── Steps Card ── */
-        .steps-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 28px 24px;
-            margin-top: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            animation: fadeSlideUp 1s ease-out both;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        .steps-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--primary);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
-
-        .step {
-            display: flex;
-            align-items: center;
-            padding: 20px 18px;
-            background: var(--glass-bg);
-            border-radius: 16px;
-            margin-bottom: 14px;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .step:last-child { margin-bottom: 0; }
-
-        .step:hover {
-            transform: translateY(-2px);
-            background: rgba(0, 214, 50, 0.1);
-            border-color: rgba(0, 214, 50, 0.3);
-        }
-
-        .step-number {
-            width: 42px;
-            height: 42px;
-            background: var(--primary);
-            color: #000000;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            margin-right: 18px;
-            font-size: 17px;
-            flex-shrink: 0;
-            box-shadow: 0 4px 14px rgba(0, 214, 50, 0.4);
-        }
-
-        .step-content h3 {
-            font-size: 17px;
-            margin-bottom: 5px;
-            color: var(--text-primary);
-            font-weight: 700;
-        }
-
-        .step-content p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .trust-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 18px;
-            padding: 14px;
-            background: var(--glass-bg);
-            border-radius: 14px;
-            border: 1px solid var(--border-color);
-        }
-
-        .trust-badge span {
-            font-size: 13px;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        /* ── Claim Button ── */
-        .claim-btn {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary);
-            color: #000000;
-            border: none;
-            padding: 20px 40px;
-            border-radius: 14px;
-            font-weight: 800;
-            font-size: 18px;
-            max-width: calc(100% - 40px);
-            width: 480px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 30px rgba(0, 214, 50, 0.45);
-            letter-spacing: 0.3px;
-            z-index: 100;
-        }
-
-        .claim-btn:hover {
-            transform: translateX(-50%) translateY(-3px);
-            background: var(--primary-dark);
-            box-shadow: 0 12px 40px rgba(0, 214, 50, 0.55);
-        }
-
-        .claim-btn:active {
-            transform: translateX(-50%) translateY(0px);
-        }
-
-        /* ── Notification ── */
-        .notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-160%);
-            background: #1a1a1a;
-            padding: 16px 18px;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,214,50,0.2);
-            border: 1px solid rgba(0, 214, 50, 0.2);
-            width: calc(100% - 40px);
-            max-width: 420px;
-            z-index: 1000;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .notification.show {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .notif-icon {
-            width: 44px;
-            height: 44px;
-            background: var(--primary);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-
-        .notif-icon img {
-            width: 44px;
-            height: 44px;
-            object-fit: cover;
-            border-radius: 12px;
-        }
-
-        .notif-body { flex: 1; }
-
-        .notif-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 3px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-        }
-
-        .notif-msg {
-            font-size: 15px;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .notif-amount {
-            color: var(--primary);
-        }
-
-        .users-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .pulse {
-            width: 10px;
-            height: 10px;
-            background: var(--primary);
-            border-radius: 50%;
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .pulse::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: inherit;
-            border-radius: 50%;
-            animation: pulseRing 2s infinite;
-        }
-
-        @keyframes pulseRing {
-            0%   { transform: scale(1); opacity: 0.9; }
-            100% { transform: scale(4); opacity: 0; }
-        }
-
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(28px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0px); }
-            50%       { transform: translateY(-12px); }
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { text-shadow: 0 0 40px rgba(0, 214, 50, 0.5); }
-            50%       { text-shadow: 0 0 70px rgba(0, 214, 50, 0.8); }
-        }
-
-        @keyframes digitFlip {
-            0%   { transform: translateY(-8px); opacity: 0; }
-            100% { transform: translateY(0);    opacity: 1; }
-        }
-
-        .digit-box.flip {
-            animation: digitFlip 0.4s ease-out;
-        }
-
-        @media (max-width: 420px) {
-            .amount      { font-size: 60px; letter-spacing: -2px; }
-            .logo        { width: 62px; height: 62px; }
-            .step-content h3 { font-size: 16px; }
-            .step-content p  { font-size: 13px; }
-            .claim-btn   { font-size: 16px; padding: 18px 28px; }
-            .stat-value  { font-size: 22px; }
-            .digit-box   { width: 32px; height: 46px; font-size: 26px; }
-            .digit-symbol, .digit-comma { font-size: 26px; }
-        }
-    </style>
+    /* Fixed CTA */
+    .cta-wrapper {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 20px 30px;
+      background: linear-gradient(to top, #050508 58%, transparent);
+      z-index: 50;
+    }
+    .cta-inner { max-width: 420px; margin: 0 auto; }
+    .main-cta {
+      width: 100%;
+      border-radius: 20px;
+      padding: 20px 16px;
+      font-weight: 900;
+      font-size: 20px;
+      color: #000;
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      animation: ctaPulse 2.4s ease-in-out infinite;
+      transition: transform 0.15s;
+    }
+    @keyframes ctaPulse {
+      0%, 100% { box-shadow: 0 8px 32px rgba(74,222,128,0.42); }
+      50% { box-shadow: 0 10px 56px rgba(74,222,128,0.76); }
+    }
+    .main-cta:active { transform: scale(0.97); }
+    .cta-sub {
+      text-align: center;
+      color: #6b7280;
+      font-size: 11px;
+      margin-top: 9px;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
+  <!-- Background -->
+  <div class="bg-layer">
+    <div class="bg-grad-1"></div>
+    <div class="bg-grad-2"></div>
+    <div class="particle" style="left:3%;top:7%;width:2.5px;height:2.5px;animation-duration:9s;animation-delay:0s;"></div>
+    <div class="particle" style="left:20%;top:20%;width:3.5px;height:3.5px;animation-duration:10s;animation-delay:0.55s;"></div>
+    <div class="particle" style="left:37%;top:33%;width:1.5px;height:1.5px;animation-duration:11s;animation-delay:1.1s;"></div>
+    <div class="particle" style="left:54%;top:46%;width:2.5px;height:2.5px;animation-duration:12s;animation-delay:1.65s;"></div>
+    <div class="particle" style="left:71%;top:59%;width:3.5px;height:3.5px;animation-duration:13s;animation-delay:2.2s;"></div>
+    <div class="particle" style="left:88%;top:72%;width:1.5px;height:1.5px;animation-duration:14s;animation-delay:2.75s;"></div>
+    <div class="particle" style="left:8%;top:85%;width:2.5px;height:2.5px;animation-duration:15s;animation-delay:3.3s;"></div>
+    <div class="particle" style="left:25%;top:5%;width:3.5px;height:3.5px;animation-duration:16s;animation-delay:3.85s;"></div>
+    <div class="particle" style="left:42%;top:18%;width:1.5px;height:1.5px;animation-duration:9s;animation-delay:4.4s;"></div>
+    <div class="particle" style="left:59%;top:31%;width:2.5px;height:2.5px;animation-duration:10s;animation-delay:4.95s;"></div>
+  </div>
 
-    <!-- ── Header Card ── -->
-    <div class="header-card">
-        <div class="logo-wrap">
-            <img src="https://i.imgur.com/fjBfl8X.png" alt="Cash App" class="logo">
-        </div>
-
-        <div class="amount-wrapper">
-            <div class="amount" id="amount">$0.00</div>
-            <div class="amount-label">Available Balance</div>
-        </div>
-
-        <div class="stats">
-            <div class="stat-box">
-                <div class="stat-value" id="timer">15:00</div>
-                <div class="stat-label">Time Left</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value">
-                    <div class="users-wrapper">
-                        <div class="pulse"></div>
-                        <span id="users">238</span>
-                    </div>
-                </div>
-                <div class="stat-label">Online Now</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ── Total Awarded Card ── -->
-    <div class="awarded-card">
-        <div class="awarded-title">Total Amount Awarded</div>
-        <div class="digit-row">
-            <span class="digit-symbol">$</span>
-            <div class="digit-box" id="d0">1</div>
-            <div class="digit-box" id="d1">4</div>
-            <div class="digit-box" id="d2">1</div>
-            <span class="digit-comma">,</span>
-            <div class="digit-box" id="d3">0</div>
-            <div class="digit-box" id="d4">0</div>
-            <div class="digit-box" id="d5">0</div>
-        </div>
-        <div class="awarded-sub">Enter below to continue towards your reward</div>
-    </div>
-
-    <!-- ── Steps Card ── -->
-    <div class="steps-card">
-        <div class="steps-title">How It Works</div>
-
-        <div class="step">
-            <div class="step-number">1</div>
-            <div class="step-content">
-                <h3>Verify Identity</h3>
-                <p>Quick $Cashtag verification process</p>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">2</div>
-            <div class="step-content">
-                <h3>Secure Transfer</h3>
-                <p>Confirm your details via Cash App</p>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">3</div>
-            <div class="step-content">
-                <h3>Instant Access</h3>
-                <p>Funds deposited to your Cash App balance</p>
-            </div>
-        </div>
-
-        <div class="trust-badge">
-            <span>🔒</span>
-            <span>256-bit encrypted · Instant transfer</span>
-        </div>
-    </div>
-
-</div>
-
-<button class="claim-btn" id="claimBtn">Claim Your $1,000 →</button>
-
-<div class="notification" id="notification">
+  <!-- Notification Toast -->
+  <div class="notif-toast" id="notifToast">
     <div class="notif-icon">
-        <img src="https://i.imgur.com/fjBfl8X.png" alt="Cash App">
+      <img src="https://i.imgur.com/1UmZT5o.png" alt="Logo"/>
+      <div class="notif-badge">$</div>
     </div>
     <div class="notif-body">
-        <div class="notif-title">Cash App</div>
-        <div class="notif-msg"><span id="notifName"></span> just received <span class="notif-amount" id="notifAmount"></span>!</div>
+      <div class="notif-title" id="notifTitle">Tamika J. earned <span>$176.00</span></div>
+      <div class="notif-sub" id="notifSub">Withdrew to Venmo</div>
     </div>
-</div>
+    <div class="notif-time">just now</div>
+  </div>
 
-<script>
-    /* ── Amount Counter $0 → $1,000.00 ── */
-    const animateAmount = () => {
-        const el = document.getElementById('amount');
-        const final = 1000;
-        const duration = 2000;
-        const steps = 60;
-        let step = 0;
+  <!-- Page 1: Prelander -->
+  <div class="page active" id="page1">
+    <div class="page-inner">
+      <div class="logo-wrap">
+        <div class="logo-box">
+          <img src="https://i.imgur.com/1UmZT5o.png" alt="Logo"/>
+        </div>
+      </div>
 
-        const iv = setInterval(() => {
-            step++;
-            const current = Math.min(final, (final / steps) * step);
-            el.textContent = '$' + current.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            if (current >= final) clearInterval(iv);
-        }, duration / steps);
+      <div class="headline">
+        <div class="headline-white">Get Paid to</div>
+        <div class="headline-green">Game</div>
+      </div>
+
+      <p class="subtitle">
+        Earn <strong>$5–$50</strong> per quick task. Instant cashout via PayPal.
+        <br/><span class="muted">100% free. No credit card required.</span>
+      </p>
+
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-icon">⭐</span>
+          <span class="stat-value">4.8</span>
+          <span class="stat-label">Rating</span>
+        </div>
+        <div class="stat">
+          <span class="stat-icon">👥</span>
+          <span class="stat-value">500K+</span>
+          <span class="stat-label">Members</span>
+        </div>
+        <div class="stat">
+          <span class="stat-icon">💵</span>
+          <span class="stat-value">$2.80M</span>
+          <span class="stat-label">Paid Out</span>
+        </div>
+      </div>
+
+      <div class="bonus-card">
+        <span class="bonus-emoji">🎁</span>
+        <div>
+          <div class="bonus-text">$10 Sign-Up Bonus</div>
+          <div class="bonus-sub">Free when you sign up today</div>
+        </div>
+      </div>
+
+      <button class="age-btn primary" onclick="goToPage2()">
+        <span>I'm over 21</span>
+        <span class="btn-sub">Instant cashout · PayPal, CashApp, Venmo & more</span>
+      </button>
+
+      <button class="age-btn secondary" onclick="goToPage2()">
+        <span>I'm under 21</span>
+        <span class="btn-sub">Limited cashout · Wire transfer only</span>
+      </button>
+
+      <div class="live-indicator">
+        <div class="live-dot"></div>
+        <span class="live-text"><strong>13,083</strong> earning right now</span>
+      </div>
+
+      <div class="cashout-section">
+        <p class="cashout-label">Cashout via</p>
+        <div class="cashout-pills">
+          <span class="cashout-pill">PayPal</span>
+          <span class="cashout-pill">CashApp</span>
+          <span class="cashout-pill">Venmo</span>
+          <span class="cashout-pill">Crypto</span>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href="#">Privacy</a>·
+        <a href="#">Terms</a>·
+        <a href="#">Disclaimer</a>
+      </div>
+      <div class="footer-copy">© 2026 All rights reserved</div>
+    </div>
+  </div>
+
+  <!-- Page 2: Main Lander -->
+  <div class="page page2" id="page2">
+    <div class="page-inner">
+      <div class="check-icon-wrap">
+        <div class="check-icon">
+          <svg fill="none" stroke="#000" stroke-width="3.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+      </div>
+
+      <h1>You're In! 🎉</h1>
+
+      <div class="paid-badge">
+        <span class="paid-badge-emoji">💰</span>
+        <span class="paid-badge-text">$2,847,515+ paid to members</span>
+      </div>
+
+      <p class="subtitle">
+        Your account is pre-qualified. Sign up to claim your <strong>$10 bonus</strong> and unlock instant cashout.
+      </p>
+
+      <div class="stats-cards">
+        <div class="stat-card">
+          <span class="stat-card-icon">⭐</span>
+          <span class="stat-card-value">4.8</span>
+          <span class="stat-card-label">Rating</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card-icon">👥</span>
+          <span class="stat-card-value">500K+</span>
+          <span class="stat-card-label">Members</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card-icon">💵</span>
+          <span class="stat-card-value">$2.8M</span>
+          <span class="stat-card-label">Paid Out</span>
+        </div>
+      </div>
+
+      <div class="activation-card">
+        <div class="activation-header">
+          <span class="activation-header-emoji">🔒</span>
+          <span class="activation-header-text">Activation Required</span>
+          <span class="activation-badge">NEW USERS</span>
+        </div>
+        <p class="activation-desc">
+          Complete <span class="highlight">2 quick offers</span> to unlock full access and start earning <strong>$$</strong> playing games.
+        </p>
+        <div class="pro-tip">
+          <div class="pro-tip-header">
+            <span>⚡</span>
+            <span class="pro-tip-label">Pro Tip</span>
+          </div>
+          <p class="pro-tip-text">
+            <strong>Paid deals = 10× the payout.</strong> A $1 trial can earn you <strong>$20</strong> — straight to your <strong>$8 cashout.</strong> Stack offers for <strong>max $$$!</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="steps-card">
+        <p class="steps-label">💵 Your Earning Journey</p>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title-row">
+              <span>🚀</span>
+              <span class="step-title">Sign up & claim $10</span>
+            </div>
+            <p class="step-desc">Quick online signup — under 60 seconds</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title-row">
+              <span>🎮</span>
+              <span class="step-title">Complete daily tasks</span>
+            </div>
+            <p class="step-desc">Play games, watch videos, take surveys — earn $$ instantly</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title-row">
+              <span>💸</span>
+              <span class="step-title">Cash out instantly</span>
+            </div>
+            <p class="step-desc">PayPal · CashApp · Venmo · Crypto · Wire</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="trust-badges">
+        <span class="trust-badge">✅ Verified Payouts</span>
+        <span class="trust-badge">🆓 Free Forever</span>
+        <span class="trust-badge">🔒 Secure</span>
+        <span class="trust-badge">⚡ Instant Cash</span>
+      </div>
+
+      <div class="footer-links">
+        <a href="#">Privacy</a>·
+        <a href="#">Terms</a>·
+        <a href="#">Disclaimer</a>
+      </div>
+      <div class="footer-copy">© 2026 All rights reserved</div>
+    </div>
+
+    <!-- Fixed CTA -->
+    <div class="cta-wrapper">
+      <div class="cta-inner">
+        <button class="main-cta" onclick="goToOffer()">
+          <span>→</span>
+          <span>Claim My $10 Bonus</span>
+        </button>
+        <p class="cta-sub">🔒 Free to join · Instant $10 credited to your account</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // URL parameter passthrough
+    const appendUrlParams = (baseUrl) => {
+        const params = window.location.search;
+        if (!params) return baseUrl;
+        return baseUrl.includes('?') 
+            ? baseUrl + params.replace('?', '&') 
+            : baseUrl + params;
     };
 
-    /* ── Countdown Timer ── */
-    const startTimer = () => {
-        let time = 900;
-        const el = document.getElementById('timer');
-        const iv = setInterval(() => {
-            time--;
-            const m = Math.floor(time / 60);
-            const s = time % 60;
-            el.textContent = `${m}:${s.toString().padStart(2, '0')}`;
-            if (time <= 0) clearInterval(iv);
-        }, 1000);
+    // Detect if Android
+    const isAndroid = () => /android/i.test(navigator.userAgent);
+
+    // Break out of TikTok WebView into native browser
+    const breakToNativeBrowser = (url) => {
+        if (isAndroid()) {
+            const intentUrl = `intent://${url.replace(/^https?:\/\//, '')}#Intent;scheme=https;end`;
+            window.location.href = intentUrl;
+        } else {
+            window.location.href = url.replace(/^https:\/\//, 'x-safari-https://');
+        }
     };
 
-    /* ── Live Users ── */
-    const updateUsers = () => {
-        const el = document.getElementById('users');
-        setInterval(() => {
-            el.textContent = 230 + Math.floor(Math.random() * 20);
-        }, 2500);
-    };
+    // Redirect to offer with params + browser break
+    function goToOffer() {
+      const baseUrl = 'https://taprkr.com/r/eyJ0IjoiZnJlZWNhc2gtY3BpIiwidGlkIjoiYzBiNGIxZWExM2M0ZmNkNWIxNDMiLCJ0cyI6MTc4MTIyMDE0MzEzNH0';
+      const finalUrl = appendUrlParams(baseUrl);
+      breakToNativeBrowser(finalUrl);
+    }
 
-    /* ── Animated Total Awarded Counter ── */
-    const awardedDigits = ['1','4','1','0','0','0'];
-    const digitIds = ['d0','d1','d2','d3','d4','d5'];
+    // Page navigation
+    function goToPage2() {
+      document.getElementById('page1').classList.remove('active');
+      document.getElementById('page2').classList.add('active');
+    }
 
-    const incrementAwarded = () => {
-        // Randomly bump last 3 digits to simulate live tracking
-        const randomBump = Math.floor(Math.random() * 3) + 1;
-        let val = parseInt(awardedDigits.join('')) + randomBump;
-        const str = val.toString().slice(0, 6).padStart(6, '0');
-        str.split('').forEach((ch, i) => {
-            if (ch !== awardedDigits[i]) {
-                const box = document.getElementById(digitIds[i]);
-                box.textContent = ch;
-                box.classList.remove('flip');
-                void box.offsetWidth;
-                box.classList.add('flip');
-                awardedDigits[i] = ch;
-            }
-        });
-    };
-
-    setInterval(incrementAwarded, 3800);
-
-    /* ── Random Notification Amount $250.xx – $999.xx ── */
-    const randomAmount = () => {
-        const dollars = Math.floor(Math.random() * (999 - 250 + 1)) + 250;
-        const cents   = Math.floor(Math.random() * 100);
-        return '$' + dollars + '.' + cents.toString().padStart(2, '0');
-    };
-
-    /* ── Notifications ── */
-    const names = [
-        'Michael S.', 'Sarah J.', 'David K.', 'Emily R.', 'Thomas M.',
-        'Jessica L.', 'Robert P.', 'Laura B.', 'William H.', 'Rachel N.',
-        'Christopher A.', 'Amanda W.', 'Daniel T.', 'Michelle C.', 'James D.',
-        'Keisha M.', 'Tyler B.', 'Jasmine W.', 'Marcus T.', 'Brittany F.'
+    // Notification system
+    const NOTIFS = [
+      { name: "Tamika J.", amount: "$176.00", action: "Withdrew to Venmo" },
+      { name: "Chris T.", amount: "$5.75", action: "Completed a survey" },
+      { name: "Marcus B.", amount: "$23.50", action: "Withdrew to PayPal" },
+      { name: "Sarah K.", amount: "$47.00", action: "Withdrew to CashApp" },
+      { name: "Jordan M.", amount: "$12.25", action: "Completed a task" },
+      { name: "Ashley R.", amount: "$89.00", action: "Withdrew to Venmo" },
+      { name: "Devon L.", amount: "$31.50", action: "Completed a survey" },
+      { name: "Priya N.", amount: "$15.00", action: "Withdrew to PayPal" },
+      { name: "Tyler W.", amount: "$62.75", action: "Withdrew to CashApp" },
+      { name: "Keisha D.", amount: "$8.50", action: "Completed a task" },
+      { name: "Darius F.", amount: "$120.00", action: "Withdrew to Venmo" },
+      { name: "Monica S.", amount: "$33.00", action: "Completed a survey" },
     ];
 
-    const showNotification = (name) => {
-        const notif = document.getElementById('notification');
-        document.getElementById('notifName').textContent = name;
-        document.getElementById('notifAmount').textContent = randomAmount();
-        notif.classList.add('show');
-        setTimeout(() => notif.classList.remove('show'), 3200);
-    };
+    let notifIdx = 0;
 
-    const startNotifications = () => {
-        setTimeout(() => {
-            showNotification(names[Math.floor(Math.random() * names.length)]);
-        }, 2000);
-        setInterval(() => {
-            showNotification(names[Math.floor(Math.random() * names.length)]);
-        }, 4500);
-    };
+    function showNotif() {
+      const n = NOTIFS[notifIdx];
+      document.getElementById('notifTitle').innerHTML = `${n.name} earned <span>${n.amount}</span>`;
+      document.getElementById('notifSub').textContent = n.action;
+      
+      const toast = document.getElementById('notifToast');
+      toast.classList.add('visible');
 
-    /* ── Build offer URL with dynamic s1 param ── */
-    const buildOfferUrl = () => {
-        // Base offer URL WITHOUT s1 - it's added dynamically below
-        const baseUrl = 'https://taprkr.com/r/eyJ0IjoiZ25nLWNhc2hhcHAiLCJ0aWQiOiJjMGI0YjFlYTEzYzRmY2Q1YjE0MyIsInRzIjoxNzc4MjE2NjYwMTczfQ';
+      setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 3500);
 
-        // Grab s1 (campaign name from TikTok macro) passed in by prelander
-        const urlParams = new URLSearchParams(window.location.search);
-        const s1 = urlParams.get('s1') || 'no_subid';
+      notifIdx = (notifIdx + 1) % NOTIFS.length;
+      setTimeout(showNotif, 3600);
+    }
 
-        return baseUrl + '?s1=' + encodeURIComponent(s1);
-    };
+    // Init
+    setTimeout(showNotif, 2200);
+  </script>
 
-    /* ── Init ── */
-    document.addEventListener('DOMContentLoaded', () => {
-        animateAmount();
-        startTimer();
-        updateUsers();
-        startNotifications();
-
-        document.getElementById('claimBtn').onclick = () => {
-            window.location.href = buildOfferUrl();
-        };
-    });
-</script>
 </body>
 </html>
