@@ -573,7 +573,7 @@
       <div class="notif-badge">$</div>
     </div>
     <div class="notif-body">
-      <div class="notif-title" id="notifTitle">Tamika J. earned <span>$176.00</span></div>
+      <div class="notif-title" id="notifTitle">Tamika J. just cashed out</div>
       <div class="notif-sub" id="notifSub">Withdrew to Venmo</div>
     </div>
     <div class="notif-time">just now</div>
@@ -594,7 +594,7 @@
       </div>
 
       <p class="subtitle">
-        Earn <strong>$5–$50</strong> per quick task. Instant cashout via PayPal.
+        Earn rewards for completing quick tasks. Instant cashout via PayPal.
         <br/><span class="muted">100% free. No credit card required.</span>
       </p>
 
@@ -619,7 +619,7 @@
       <div class="bonus-card">
         <span class="bonus-emoji">🎁</span>
         <div>
-          <div class="bonus-text">$10 Sign-Up Bonus</div>
+          <div class="bonus-text">Welcome Bonus</div>
           <div class="bonus-sub">Free when you sign up today</div>
         </div>
       </div>
@@ -677,7 +677,7 @@
       </div>
 
       <p class="subtitle">
-        Your account is pre-qualified. Sign up to claim your <strong>$10 bonus</strong> and unlock instant cashout.
+        Your account is pre-qualified. Sign up to claim your <strong>welcome bonus</strong> and unlock instant cashout.
       </p>
 
       <div class="stats-cards">
@@ -705,7 +705,7 @@
           <span class="activation-badge">NEW USERS</span>
         </div>
         <p class="activation-desc">
-          Complete <span class="highlight">2 quick offers</span> to unlock full access and start earning <strong>$$</strong> playing games.
+          Complete <span class="highlight">2 quick offers</span> to unlock full access and start earning rewards playing games.
         </p>
         <div class="pro-tip">
           <div class="pro-tip-header">
@@ -713,7 +713,7 @@
             <span class="pro-tip-label">Pro Tip</span>
           </div>
           <p class="pro-tip-text">
-            <strong>Paid deals = 10× the payout.</strong> A $1 trial can earn you <strong>$20</strong> — straight to your <strong>$8 cashout.</strong> Stack offers for <strong>max $$$!</strong>
+            <strong>Paid deals reward the most.</strong> Premium offers pay out far more than free ones — stack offers to maximize your rewards.
           </p>
         </div>
       </div>
@@ -725,7 +725,7 @@
           <div class="step-content">
             <div class="step-title-row">
               <span>🚀</span>
-              <span class="step-title">Sign up & claim $10</span>
+              <span class="step-title">Sign up & claim your bonus</span>
             </div>
             <p class="step-desc">Quick online signup — under 60 seconds</p>
           </div>
@@ -737,7 +737,7 @@
               <span>🎮</span>
               <span class="step-title">Complete daily tasks</span>
             </div>
-            <p class="step-desc">Play games, watch videos, take surveys — earn $$ instantly</p>
+            <p class="step-desc">Play games, watch videos, take surveys — earn rewards instantly</p>
           </div>
         </div>
         <div class="step">
@@ -772,9 +772,9 @@
       <div class="cta-inner">
         <button class="main-cta" onclick="goToOffer()">
           <span>→</span>
-          <span>Claim My $10 Bonus</span>
+          <span>Claim My Bonus</span>
         </button>
-        <p class="cta-sub">🔒 Free to join · Instant $10 credited to your account</p>
+        <p class="cta-sub">🔒 Free to join · Bonus credited to your account</p>
       </div>
     </div>
   </div>
@@ -817,25 +817,25 @@
 
     // Notification system
     const NOTIFS = [
-      { name: "Tamika J.", amount: "$176.00", action: "Withdrew to Venmo" },
-      { name: "Chris T.", amount: "$5.75", action: "Completed a survey" },
-      { name: "Marcus B.", amount: "$23.50", action: "Withdrew to PayPal" },
-      { name: "Sarah K.", amount: "$47.00", action: "Withdrew to CashApp" },
-      { name: "Jordan M.", amount: "$12.25", action: "Completed a task" },
-      { name: "Ashley R.", amount: "$89.00", action: "Withdrew to Venmo" },
-      { name: "Devon L.", amount: "$31.50", action: "Completed a survey" },
-      { name: "Priya N.", amount: "$15.00", action: "Withdrew to PayPal" },
-      { name: "Tyler W.", amount: "$62.75", action: "Withdrew to CashApp" },
-      { name: "Keisha D.", amount: "$8.50", action: "Completed a task" },
-      { name: "Darius F.", amount: "$120.00", action: "Withdrew to Venmo" },
-      { name: "Monica S.", amount: "$33.00", action: "Completed a survey" },
+      { name: "Tamika J.", action: "Withdrew to Venmo" },
+      { name: "Chris T.", action: "Completed a survey" },
+      { name: "Marcus B.", action: "Withdrew to PayPal" },
+      { name: "Sarah K.", action: "Withdrew to CashApp" },
+      { name: "Jordan M.", action: "Completed a task" },
+      { name: "Ashley R.", action: "Withdrew to Venmo" },
+      { name: "Devon L.", action: "Completed a survey" },
+      { name: "Priya N.", action: "Withdrew to PayPal" },
+      { name: "Tyler W.", action: "Withdrew to CashApp" },
+      { name: "Keisha D.", action: "Completed a task" },
+      { name: "Darius F.", action: "Withdrew to Venmo" },
+      { name: "Monica S.", action: "Completed a survey" },
     ];
 
     let notifIdx = 0;
 
     function showNotif() {
       const n = NOTIFS[notifIdx];
-      document.getElementById('notifTitle').innerHTML = `${n.name} earned <span>${n.amount}</span>`;
+      document.getElementById('notifTitle').textContent = `${n.name} just cashed out`;
       document.getElementById('notifSub').textContent = n.action;
       
       const toast = document.getElementById('notifToast');
