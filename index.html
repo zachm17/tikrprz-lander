@@ -3,81 +3,38 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Get Paid to Game</title>
+  <title>Apple Pay Rewards</title>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       min-height: 100vh;
-      background: #050508;
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-    /* Background */
-    .bg-layer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-    .bg-grad-1 {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 90% 45% at 50% 0%, rgba(74,222,128,0.12) 0%, transparent 65%);
-    }
-    .bg-grad-2 {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 55% 28% at 85% 95%, rgba(34,197,94,0.05) 0%, transparent 55%);
-    }
-    .particle {
-      position: absolute;
-      border-radius: 50%;
-      background: #4ade80;
-      opacity: 0.1;
-      animation: floatParticle 10s ease-in-out infinite;
-    }
-    @keyframes floatParticle {
-      0%, 100% { transform: translateY(-18px); opacity: 0.05; }
-      50% { transform: translateY(18px); opacity: 0.2; }
+      background: #f2f2f7;
     }
 
     /* Pages */
-    .page { display: none; position: relative; z-index: 1; }
-    .page.active { display: block; }
-    .page-inner {
-      max-width: 420px;
-      margin: 0 auto;
-      padding: 100px 20px 60px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .page2 .page-inner { padding-bottom: 168px; }
+    .page { display: none; min-height: 100vh; align-items: center; justify-content: center; padding: 24px 16px; }
+    .page.active { display: flex; }
+    .page-inner { max-width: 420px; width: 100%; text-align: center; }
 
     /* Notification Toast */
     .notif-toast {
       position: fixed;
-      top: 12px;
+      top: 14px;
       left: 50%;
       transform: translateX(-50%) translateY(-90px);
       opacity: 0;
       transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
-      z-index: 100;
+      z-index: 9999;
+      background: #fff;
+      border-radius: 16px;
+      padding: 10px 14px;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.16);
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 10px 16px;
-      border-radius: 18px;
-      max-width: 340px;
-      width: 94%;
-      background: rgba(7,9,15,0.97);
-      border: 1px solid rgba(74,222,128,0.24);
-      box-shadow: 0 6px 36px rgba(0,0,0,0.75);
-      backdrop-filter: blur(20px);
+      gap: 10px;
+      width: 290px;
       pointer-events: none;
     }
     .notif-toast.visible {
@@ -85,697 +42,332 @@
       opacity: 1;
     }
     .notif-icon {
-      position: relative;
-      flex-shrink: 0;
-    }
-    .notif-icon img {
       width: 38px; height: 38px;
+      background: #111;
       border-radius: 10px;
-      object-fit: cover;
-      display: block;
-    }
-    .notif-badge {
-      position: absolute;
-      top: -4px; right: -4px;
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      background: #4ade80;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 8px;
-      font-weight: 900;
-      color: #000;
+      flex-shrink: 0;
     }
-    .notif-body { flex: 1; min-width: 0; }
-    .notif-title { color: #fff; font-weight: 700; font-size: 12px; }
-    .notif-title span { color: #4ade80; }
-    .notif-sub { color: #9ca3af; font-size: 11px; margin-top: 1px; }
-    .notif-time { color: #6b7280; font-size: 11px; flex-shrink: 0; }
+    .notif-icon img { width: 22px; height: 22px; filter: invert(1) brightness(10); }
+    .notif-body { flex: 1; text-align: left; }
+    .notif-title { font-weight: 700; font-size: 13px; color: #111; line-height: 1.3; }
+    .notif-sub { font-size: 12px; color: #888; margin-top: 1px; }
+    .notif-time { font-size: 11px; color: #bbb; flex-shrink: 0; }
 
-    /* Logo */
-    .logo-wrap { margin-bottom: 22px; }
-    .logo-box {
-      width: 70px; height: 70px;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 0 30px rgba(74,222,128,0.5);
-      animation: logoPulse 2.8s ease-in-out infinite;
+    /* Logo badge */
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 16px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      margin-bottom: 28px;
     }
-    @keyframes logoPulse {
-      0%, 100% { box-shadow: 0 0 16px rgba(74,222,128,0.28); }
-      50% { box-shadow: 0 0 44px rgba(74,222,128,0.68); }
+    .logo-badge-icon {
+      width: 28px; height: 28px;
+      background: #111;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .logo-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .logo-badge-icon img { width: 16px; height: 16px; filter: invert(1) brightness(10); }
+    .logo-badge span { font-size: 14px; font-weight: 600; color: #111; }
 
     /* Headlines */
-    .headline { text-align: center; margin-bottom: 16px; }
-    .headline-white { font-size: 48px; font-weight: 900; color: #fff; line-height: 1.08; }
-    .headline-green {
-      font-size: 48px; font-weight: 900; line-height: 1.08;
-      background: linear-gradient(90deg, #4ade80, #86efac, #22c55e, #4ade80);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: gradientShift 4s linear infinite;
-    }
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    h1 { font-size: clamp(36px, 9vw, 48px); font-weight: 900; color: #0a0a0a; line-height: 1.1; margin: 0 0 16px; }
+    .page2 h1 { font-size: clamp(30px, 7vw, 42px); margin-bottom: 12px; }
 
-    .subtitle {
-      color: #d1d5db;
-      text-align: center;
+    .subtitle { color: #555; font-size: 15px; line-height: 1.6; margin: 0 auto 24px; max-width: 340px; }
+
+    /* Live badge */
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 18px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      margin-bottom: 28px;
       font-size: 14px;
-      line-height: 1.75;
-      margin-bottom: 22px;
+      color: #222;
     }
-    .subtitle strong { color: #4ade80; }
-    .subtitle .muted { color: #6b7280; }
-
-    /* Stats row */
-    .stats-row {
-      display: flex;
-      width: 100%;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.07);
-      overflow: hidden;
-      margin-bottom: 20px;
+    .live-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.25);
     }
-    .stat {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 14px 8px;
-      background: rgba(255,255,255,0.03);
-      border-right: 1px solid rgba(255,255,255,0.07);
-    }
-    .stat:last-child { border-right: none; }
-    .stat-icon { font-size: 20px; margin-bottom: 3px; }
-    .stat-value { color: #fff; font-weight: 800; font-size: 13px; }
-    .stat-label { color: #6b7280; font-size: 11px; }
-
-    /* Bonus card */
-    .bonus-card {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 18px 20px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, rgba(74,222,128,0.10), rgba(34,197,94,0.04));
-      border: 1px solid rgba(74,222,128,0.32);
-    }
-    .bonus-emoji { font-size: 42px; animation: wiggle 1.6s ease-in-out infinite; }
-    @keyframes wiggle {
-      0%, 100% { transform: rotate(0deg) scale(1); }
-      25% { transform: rotate(-14deg) scale(1.1); }
-      75% { transform: rotate(14deg) scale(1.1); }
-    }
-    .bonus-text { font-weight: 900; font-size: 22px; color: #4ade80; }
-    .bonus-sub { color: #9ca3af; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; }
 
     /* Age buttons */
     .age-btn {
       width: 100%;
       border-radius: 18px;
-      padding: 18px 16px;
-      font-weight: 900;
-      font-size: 19px;
+      padding: 18px 20px;
+      text-align: left;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: background 0.2s;
+    }
+    .age-btn.primary { background: #111; color: #fff; }
+    .age-btn.primary:hover { background: #2a2a2a; }
+    .age-btn.secondary { background: #fff; color: #111; border: 1.5px solid #e5e5e5; }
+    .age-btn.secondary:hover { background: #f8f8f8; }
+    .age-btn-title { font-weight: 800; font-size: 18px; }
+    .age-btn-sub { font-size: 13px; margin-top: 3px; }
+    .age-btn.primary .age-btn-sub { color: #aaa; }
+    .age-btn.secondary .age-btn-sub { color: #888; }
+
+    /* Page 2 */
+    .app-icon-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .app-icon {
+      width: 56px; height: 56px;
+      background: #111;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .app-icon img { width: 30px; height: 30px; filter: invert(1) brightness(10); }
+
+    .timer-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 18px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .stats-line {
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 10px;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .desc { color: #666; font-size: 14px; line-height: 1.6; margin: 0 auto 20px; max-width: 340px; }
+
+    /* Main CTA */
+    .main-cta {
+      width: 100%;
+      background: #111;
+      color: #fff;
+      border-radius: 999px;
+      padding: 18px 24px;
+      font-size: 17px;
+      font-weight: 800;
       border: none;
       cursor: pointer;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 3px;
-      margin-bottom: 12px;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .age-btn:active { transform: scale(0.97); }
-    .age-btn.primary {
-      color: #000;
-      background: linear-gradient(135deg, #4ade80, #22c55e);
-      box-shadow: 0 8px 28px rgba(74,222,128,0.36);
-      animation: btnPulse 2.4s ease-in-out infinite;
-    }
-    @keyframes btnPulse {
-      0%, 100% { box-shadow: 0 8px 28px rgba(74,222,128,0.36); }
-      50% { box-shadow: 0 8px 46px rgba(74,222,128,0.68); }
-    }
-    .age-btn.primary .btn-sub { font-size: 12px; font-weight: 500; color: rgba(0,0,0,0.58); }
-    .age-btn.secondary {
-      color: #fff;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.09);
-    }
-    .age-btn.secondary .btn-sub { font-size: 12px; font-weight: 500; color: #6b7280; }
-
-    /* Live indicator */
-    .live-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 26px;
-    }
-    .live-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: #4ade80;
-      animation: livePulse 1.4s ease-in-out infinite;
-    }
-    @keyframes livePulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.7); opacity: 0.3; }
-    }
-    .live-text { color: #d1d5db; font-size: 13px; }
-    .live-text strong { color: #fff; }
-
-    /* Cashout methods */
-    .cashout-section { width: 100%; margin-bottom: 26px; }
-    .cashout-label {
-      color: #6b7280;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      text-align: center;
-      margin-bottom: 12px;
-      font-weight: 700;
-    }
-    .cashout-pills {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
       justify-content: center;
-    }
-    .cashout-pill {
-      padding: 7px 16px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #d1d5db;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.10);
-    }
-
-    /* Footer */
-    .footer-links {
-      color: #4b5563;
-      font-size: 11px;
-      display: flex;
       gap: 8px;
-      margin-bottom: 4px;
+      margin-bottom: 12px;
+      transition: background 0.2s;
     }
-    .footer-links a { color: #4b5563; text-decoration: none; }
-    .footer-copy { color: #4b5563; font-size: 11px; }
+    .main-cta:hover { background: #2a2a2a; }
 
-    /* ═══════ PAGE 2 ═══════ */
-    .check-icon-wrap { margin-bottom: 20px; }
-    .check-icon {
-      width: 82px; height: 82px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #4ade80, #22c55e);
+    .trust-icons {
       display: flex;
       align-items: center;
       justify-content: center;
-      animation: checkPulse 2.2s ease-in-out infinite;
-    }
-    @keyframes checkPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
-      50% { box-shadow: 0 0 0 14px rgba(74,222,128,0.18); }
-    }
-    .check-icon svg { width: 38px; height: 38px; }
-
-    .page2 h1 {
-      font-size: 40px;
-      font-weight: 900;
-      color: #fff;
-      margin-bottom: 12px;
-      text-align: center;
-    }
-
-    .paid-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 20px;
-      padding: 8px 18px;
-      border-radius: 999px;
-      background: rgba(74,222,128,0.08);
-      border: 1px solid rgba(74,222,128,0.2);
-    }
-    .paid-badge-emoji { font-size: 20px; animation: bounce 1.4s ease-in-out infinite; }
-    @keyframes bounce {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-    }
-    .paid-badge-text { font-weight: 800; font-size: 13px; color: #4ade80; }
-
-    .page2 .subtitle { margin-bottom: 24px; }
-
-    /* Stats cards */
-    .stats-cards {
-      display: flex;
-      gap: 10px;
-      width: 100%;
-      margin-bottom: 20px;
-    }
-    .stat-card {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 14px 8px;
-      border-radius: 16px;
-      background: rgba(74,222,128,0.06);
-      border: 1px solid rgba(74,222,128,0.14);
-    }
-    .stat-card-icon { font-size: 20px; }
-    .stat-card-value { color: #fff; font-weight: 800; font-size: 13px; margin-top: 3px; }
-    .stat-card-label { color: #6b7280; font-size: 11px; }
-
-    /* Activation card */
-    .activation-card {
-      width: 100%;
-      border-radius: 22px;
-      padding: 18px;
-      margin-bottom: 16px;
-      background: rgba(7,9,17,0.98);
-      border: 1px solid rgba(74,222,128,0.18);
-      box-shadow: 0 4px 50px rgba(74,222,128,0.05);
-    }
-    .activation-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-    .activation-header-emoji { font-size: 22px; }
-    .activation-header-text { font-weight: 800; color: #fff; font-size: 15px; }
-    .activation-badge {
-      padding: 3px 11px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 800;
-      color: #fff;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      animation: badgePulse 1.8s ease-in-out infinite;
-    }
-    @keyframes badgePulse {
-      0%, 100% { opacity: 0.65; }
-      50% { opacity: 1; }
-    }
-    .activation-desc {
-      color: #d1d5db;
-      font-size: 14px;
-      line-height: 1.65;
-      margin-bottom: 16px;
-    }
-    .activation-desc .highlight {
-      color: #4ade80;
-      font-weight: 700;
-      animation: textPulse 1.6s ease-in-out infinite;
-    }
-    @keyframes textPulse {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 1; }
-    }
-    .activation-desc strong { color: #4ade80; }
-
-    /* Pro tip */
-    .pro-tip {
-      border-radius: 14px;
-      padding: 14px;
-      background: linear-gradient(135deg, rgba(234,179,8,0.09), rgba(245,158,11,0.04));
-      border: 1px solid rgba(234,179,8,0.2);
-      animation: tipBorder 2.8s ease-in-out infinite;
-    }
-    @keyframes tipBorder {
-      0%, 100% { border-color: rgba(234,179,8,0.12); }
-      50% { border-color: rgba(234,179,8,0.48); }
-    }
-    .pro-tip-header {
-      display: flex;
-      align-items: center;
       gap: 6px;
-      margin-bottom: 6px;
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 20px;
     }
-    .pro-tip-header span:first-child { font-size: 15px; animation: zap 0.9s ease-in-out infinite; }
-    @keyframes zap {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.4); }
-    }
-    .pro-tip-label {
-      color: #fbbf24;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-    .pro-tip-text {
-      color: #fde68a;
-      font-size: 12px;
-      line-height: 1.65;
-    }
-    .pro-tip-text strong { color: #fde68a; }
 
     /* Steps card */
     .steps-card {
-      width: 100%;
-      border-radius: 22px;
-      padding: 18px;
-      margin-bottom: 20px;
-      background: rgba(7,9,17,0.98);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: left;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
     }
     .steps-label {
-      color: #6b7280;
       font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      text-align: center;
-      margin-bottom: 20px;
       font-weight: 700;
+      color: #aaa;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
     }
-    .step {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-    .step + .step { margin-top: 20px; }
+    .step { display: flex; align-items: flex-start; gap: 12px; }
+    .step + .step { margin-top: 14px; padding-top: 14px; border-top: 1px solid #f0f0f0; }
     .step-num {
-      width: 34px; height: 34px;
+      width: 32px; height: 32px;
+      background: #111;
       border-radius: 50%;
-      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 900;
+      color: #fff;
+      font-weight: 800;
       font-size: 14px;
-      color: #000;
-      background: linear-gradient(135deg, #4ade80, #22c55e);
-      box-shadow: 0 4px 14px rgba(74,222,128,0.4);
+      flex-shrink: 0;
     }
-    .step-content { flex: 1; }
-    .step-title-row {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-    .step-title-row span:first-child { font-size: 16px; }
-    .step-title { font-weight: 800; color: #fff; font-size: 14px; }
-    .step-desc { color: #6b7280; font-size: 12px; margin-top: 3px; }
+    .step-title { font-weight: 800; color: #111; font-size: 15px; margin-bottom: 2px; }
+    .step-desc { color: #888; font-size: 13px; line-height: 1.5; }
 
-    /* Trust badges */
-    .trust-badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 22px;
-    }
-    .trust-badge {
-      font-size: 12px;
-      color: #d1d5db;
-      padding: 6px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    /* Fixed CTA */
-    .cta-wrapper {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 20px 20px 30px;
-      background: linear-gradient(to top, #050508 58%, transparent);
-      z-index: 50;
-    }
-    .cta-inner { max-width: 420px; margin: 0 auto; }
-    .main-cta {
-      width: 100%;
+    /* Urgency card */
+    .urgency-card {
+      background: #fff;
       border-radius: 20px;
-      padding: 20px 16px;
-      font-weight: 900;
-      font-size: 20px;
-      color: #000;
-      background: linear-gradient(135deg, #4ade80, #22c55e);
-      border: none;
-      cursor: pointer;
+      padding: 16px 18px;
+      text-align: left;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+      font-size: 13px;
+      color: #444;
+      line-height: 1.6;
+    }
+
+    /* Footer trust */
+    .footer-trust {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      animation: ctaPulse 2.4s ease-in-out infinite;
-      transition: transform 0.15s;
+      gap: 20px;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
     }
-    @keyframes ctaPulse {
-      0%, 100% { box-shadow: 0 8px 32px rgba(74,222,128,0.42); }
-      50% { box-shadow: 0 10px 56px rgba(74,222,128,0.76); }
-    }
-    .main-cta:active { transform: scale(0.97); }
-    .cta-sub {
-      text-align: center;
-      color: #6b7280;
-      font-size: 11px;
-      margin-top: 9px;
-    }
+    .footer-sub { font-size: 12px; color: #aaa; }
   </style>
 </head>
 <body>
 
-  <!-- Background -->
-  <div class="bg-layer">
-    <div class="bg-grad-1"></div>
-    <div class="bg-grad-2"></div>
-    <div class="particle" style="left:3%;top:7%;width:2.5px;height:2.5px;animation-duration:9s;animation-delay:0s;"></div>
-    <div class="particle" style="left:20%;top:20%;width:3.5px;height:3.5px;animation-duration:10s;animation-delay:0.55s;"></div>
-    <div class="particle" style="left:37%;top:33%;width:1.5px;height:1.5px;animation-duration:11s;animation-delay:1.1s;"></div>
-    <div class="particle" style="left:54%;top:46%;width:2.5px;height:2.5px;animation-duration:12s;animation-delay:1.65s;"></div>
-    <div class="particle" style="left:71%;top:59%;width:3.5px;height:3.5px;animation-duration:13s;animation-delay:2.2s;"></div>
-    <div class="particle" style="left:88%;top:72%;width:1.5px;height:1.5px;animation-duration:14s;animation-delay:2.75s;"></div>
-    <div class="particle" style="left:8%;top:85%;width:2.5px;height:2.5px;animation-duration:15s;animation-delay:3.3s;"></div>
-    <div class="particle" style="left:25%;top:5%;width:3.5px;height:3.5px;animation-duration:16s;animation-delay:3.85s;"></div>
-    <div class="particle" style="left:42%;top:18%;width:1.5px;height:1.5px;animation-duration:9s;animation-delay:4.4s;"></div>
-    <div class="particle" style="left:59%;top:31%;width:2.5px;height:2.5px;animation-duration:10s;animation-delay:4.95s;"></div>
-  </div>
-
   <!-- Notification Toast -->
   <div class="notif-toast" id="notifToast">
     <div class="notif-icon">
-      <img src="https://i.imgur.com/1UmZT5o.png" alt="Logo"/>
-      <div class="notif-badge">$</div>
+      <img src="https://i.imgur.com/dW4fiVe.png" alt="Apple"/>
     </div>
     <div class="notif-body">
-      <div class="notif-title" id="notifTitle">Tamika J. just cashed out</div>
-      <div class="notif-sub" id="notifSub">Withdrew to Venmo</div>
+      <div class="notif-title" id="notifTitle">Ava M. claimed +$142</div>
+      <div class="notif-sub">Apple Pay bonus delivered</div>
     </div>
-    <div class="notif-time">just now</div>
+    <div class="notif-time">2s ago</div>
   </div>
 
   <!-- Page 1: Prelander -->
   <div class="page active" id="page1">
     <div class="page-inner">
-      <div class="logo-wrap">
-        <div class="logo-box">
-          <img src="https://i.imgur.com/1UmZT5o.png" alt="Logo"/>
+      <div class="logo-badge">
+        <div class="logo-badge-icon">
+          <img src="https://i.imgur.com/dW4fiVe.png" alt="Apple"/>
         </div>
+        <span>Apple Pay Rewards</span>
       </div>
 
-      <div class="headline">
-        <div class="headline-white">Get Paid to</div>
-        <div class="headline-green">Game</div>
-      </div>
+      <h1>Claim Your<br/>$750 Bonus</h1>
 
-      <p class="subtitle">
-        Earn rewards for completing quick tasks. Instant cashout via PayPal.
-        <br/><span class="muted">100% free. No credit card required.</span>
-      </p>
+      <p class="subtitle">Get $750 loaded straight to your Apple Pay wallet — spend it anywhere Apple Pay is accepted. Limited drop today only.</p>
 
-      <div class="stats-row">
-        <div class="stat">
-          <span class="stat-icon">⭐</span>
-          <span class="stat-value">4.8</span>
-          <span class="stat-label">Rating</span>
-        </div>
-        <div class="stat">
-          <span class="stat-icon">👥</span>
-          <span class="stat-value">500K+</span>
-          <span class="stat-label">Members</span>
-        </div>
-        <div class="stat">
-          <span class="stat-icon">💵</span>
-          <span class="stat-value">$2.80M</span>
-          <span class="stat-label">Paid Out</span>
-        </div>
-      </div>
-
-      <div class="bonus-card">
-        <span class="bonus-emoji">🎁</span>
-        <div>
-          <div class="bonus-text">Welcome Bonus</div>
-          <div class="bonus-sub">Free when you sign up today</div>
-        </div>
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        <span>4,224 claimed in the last hour</span>
       </div>
 
       <button class="age-btn primary" onclick="goToPage2()">
-        <span>I'm over 21</span>
-        <span class="btn-sub">Instant cashout · PayPal, CashApp, Venmo & more</span>
+        <div class="age-btn-title">I'm 18 or older</div>
+        <div class="age-btn-sub">Eligible for the full $750 bonus</div>
       </button>
 
       <button class="age-btn secondary" onclick="goToPage2()">
-        <span>I'm under 21</span>
-        <span class="btn-sub">Limited cashout · Wire transfer only</span>
+        <div class="age-btn-title">I'm under 18</div>
+        <div class="age-btn-sub">Eligible for $250 credit with parent consent</div>
       </button>
-
-      <div class="live-indicator">
-        <div class="live-dot"></div>
-        <span class="live-text"><strong>13,083</strong> earning right now</span>
-      </div>
-
-      <div class="cashout-section">
-        <p class="cashout-label">Cashout via</p>
-        <div class="cashout-pills">
-          <span class="cashout-pill">PayPal</span>
-          <span class="cashout-pill">CashApp</span>
-          <span class="cashout-pill">Venmo</span>
-          <span class="cashout-pill">Crypto</span>
-        </div>
-      </div>
-
-      <div class="footer-links">
-        <a href="#">Privacy</a>·
-        <a href="#">Terms</a>·
-        <a href="#">Disclaimer</a>
-      </div>
-      <div class="footer-copy">© 2026 All rights reserved</div>
     </div>
   </div>
 
   <!-- Page 2: Main Lander -->
   <div class="page page2" id="page2">
     <div class="page-inner">
-      <div class="check-icon-wrap">
-        <div class="check-icon">
-          <svg fill="none" stroke="#000" stroke-width="3.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-          </svg>
+      <div class="app-icon-wrap">
+        <div class="app-icon">
+          <img src="https://i.imgur.com/dW4fiVe.png" alt="Apple"/>
         </div>
       </div>
 
-      <h1>You're In! 🎉</h1>
-
-      <div class="paid-badge">
-        <span class="paid-badge-emoji">💰</span>
-        <span class="paid-badge-text">$2,847,515+ paid to members</span>
+      <div class="timer-badge">
+        <span>⏱</span>
+        <span>Offer expires in <strong id="timer">07:56</strong></span>
       </div>
 
-      <p class="subtitle">
-        Your account is pre-qualified. Sign up to claim your <strong>welcome bonus</strong> and unlock instant cashout.
+      <h1>Your $750 Apple<br/>Pay Is Ready</h1>
+
+      <p class="stats-line">
+        <span>💳</span> $233,421+ sent to Apple Pay today
       </p>
 
-      <div class="stats-cards">
-        <div class="stat-card">
-          <span class="stat-card-icon">⭐</span>
-          <span class="stat-card-value">4.8</span>
-          <span class="stat-card-label">Rating</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-card-icon">👥</span>
-          <span class="stat-card-value">500K+</span>
-          <span class="stat-card-label">Members</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-card-icon">💵</span>
-          <span class="stat-card-value">$2.8M</span>
-          <span class="stat-card-label">Paid Out</span>
-        </div>
-      </div>
+      <p class="desc">Your spot is confirmed. Complete a quick free signup and we'll send $750 straight to your Apple Pay wallet.</p>
 
-      <div class="activation-card">
-        <div class="activation-header">
-          <span class="activation-header-emoji">🔒</span>
-          <span class="activation-header-text">Activation Required</span>
-          <span class="activation-badge">NEW USERS</span>
-        </div>
-        <p class="activation-desc">
-          Complete <span class="highlight">2 quick offers</span> to unlock full access and start earning rewards playing games.
-        </p>
-        <div class="pro-tip">
-          <div class="pro-tip-header">
-            <span>⚡</span>
-            <span class="pro-tip-label">Pro Tip</span>
-          </div>
-          <p class="pro-tip-text">
-            <strong>Paid deals reward the most.</strong> Premium offers pay out far more than free ones — stack offers to maximize your rewards.
-          </p>
-        </div>
+      <button class="main-cta" onclick="goToOffer()">
+        <span>💳</span> Claim My $750 Now
+      </button>
+
+      <div class="trust-icons">
+        <span>💳</span><span>📱</span><span>⚡</span><span>🔒</span>
+        <span>Instant Apple Pay transfer</span>
       </div>
 
       <div class="steps-card">
-        <p class="steps-label">💵 Your Earning Journey</p>
+        <p class="steps-label">How It Works</p>
         <div class="step">
           <div class="step-num">1</div>
-          <div class="step-content">
-            <div class="step-title-row">
-              <span>🚀</span>
-              <span class="step-title">Sign up & claim your bonus</span>
-            </div>
-            <p class="step-desc">Quick online signup — under 60 seconds</p>
+          <div>
+            <p class="step-title">Create Free Account</p>
+            <p class="step-desc">Sign up takes less than 60 seconds</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <div class="step-content">
-            <div class="step-title-row">
-              <span>🎮</span>
-              <span class="step-title">Complete daily tasks</span>
-            </div>
-            <p class="step-desc">Play games and take surveys — earn rewards instantly</p>
+          <div>
+            <p class="step-title">Complete 2-3 offers</p>
+            <p class="step-desc">Get your $750 Gift Card — The more offers you do the more you'll earn</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <div class="step-content">
-            <div class="step-title-row">
-              <span>💸</span>
-              <span class="step-title">Cash out instantly</span>
-            </div>
-            <p class="step-desc">PayPal · CashApp · Venmo · Crypto · Wire</p>
+          <div>
+            <p class="step-title">Get $750 Instantly</p>
+            <p class="step-desc">$750 lands in your Apple Pay wallet — spend it anywhere</p>
           </div>
         </div>
       </div>
 
-      <div class="trust-badges">
-        <span class="trust-badge">✅ Verified Payouts</span>
-        <span class="trust-badge">🆓 Free Forever</span>
-        <span class="trust-badge">🔒 Secure</span>
-        <span class="trust-badge">⚡ Instant Cash</span>
+      <div class="urgency-card">
+        ⏳ <strong>Limited slots remaining.</strong> Complete <strong>2 quick steps</strong> after signup to lock in your $750 Apple Pay bonus before it's gone.
       </div>
 
-      <div class="footer-links">
-        <a href="#">Privacy</a>·
-        <a href="#">Terms</a>·
-        <a href="#">Disclaimer</a>
+      <div class="footer-trust">
+        <span>🛡️ Verified</span>
+        <span>👥 500K+ claimed</span>
+        <span>⭐ 4.8 rated</span>
       </div>
-      <div class="footer-copy">© 2026 All rights reserved</div>
-    </div>
-
-    <!-- Fixed CTA -->
-    <div class="cta-wrapper">
-      <div class="cta-inner">
-        <button class="main-cta" onclick="goToOffer()">
-          <span>→</span>
-          <span>Claim My Bonus</span>
-        </button>
-        <p class="cta-sub">🔒 Free to join · Bonus credited to your account</p>
-      </div>
+      <p class="footer-sub">Trusted by over 500,000 members claiming Apple Pay bonuses daily</p>
     </div>
   </div>
 
@@ -804,7 +396,7 @@
 
     // Redirect to offer with params + browser break
     function goToOffer() {
-      const baseUrl = 'https://taprkr.com/r/eyJ0IjoiZnJlZWNhc2gtY3BpIiwidGlkIjoiYzBiNGIxZWExM2M0ZmNkNWIxNDMiLCJ0cyI6MTc4MTIyMDE0MzEzNH0';
+      const baseUrl = 'https://t.afftrackr.com/?bbz=EATp9C8smisUop8ZDFTY9bZ0MQv07NH6vQJDRoz7h5U%3D&s1=';
       const finalUrl = appendUrlParams(baseUrl);
       breakToNativeBrowser(finalUrl);
     }
@@ -813,31 +405,52 @@
     function goToPage2() {
       document.getElementById('page1').classList.remove('active');
       document.getElementById('page2').classList.add('active');
+      startTimer();
+    }
+
+    // Timer
+    let timeLeft = 7 * 60 + 56;
+    let timerInterval = null;
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          return;
+        }
+        timeLeft--;
+        const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+        const s = (timeLeft % 60).toString().padStart(2, '0');
+        document.getElementById('timer').textContent = `${m}:${s}`;
+      }, 1000);
     }
 
     // Notification system
-    const NOTIFS = [
-      { name: "Tamika J.", action: "Withdrew to Venmo" },
-      { name: "Chris T.", action: "Completed a survey" },
-      { name: "Marcus B.", action: "Withdrew to PayPal" },
-      { name: "Sarah K.", action: "Withdrew to CashApp" },
-      { name: "Jordan M.", action: "Completed a task" },
-      { name: "Ashley R.", action: "Withdrew to Venmo" },
-      { name: "Devon L.", action: "Completed a survey" },
-      { name: "Priya N.", action: "Withdrew to PayPal" },
-      { name: "Tyler W.", action: "Withdrew to CashApp" },
-      { name: "Keisha D.", action: "Completed a task" },
-      { name: "Darius F.", action: "Withdrew to Venmo" },
-      { name: "Monica S.", action: "Completed a survey" },
+    const NAMES = [
+      'Ava M.', 'James T.', 'Sarah K.', 'Mike R.', 'Emily C.',
+      'Tyler B.', 'Jessica L.', 'Noah P.', 'Olivia S.', 'Liam H.',
+      'Emma W.', 'Ethan D.', 'Sophia F.', 'Mason G.', 'Isabella N.',
+      'Lucas A.', 'Mia V.', 'Aiden J.', 'Charlotte E.', 'Jackson Q.',
+      'Brianna T.', 'Derek S.', 'Kayla R.', 'Trent W.', 'Amber F.'
     ];
 
-    let notifIdx = 0;
+    let lastName = null;
+
+    function getRandName() {
+      const pool = NAMES.filter(n => n !== lastName);
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    function getRandAmount() {
+      return Math.floor(Math.random() * (158 - 42 + 1)) + 42;
+    }
 
     function showNotif() {
-      const n = NOTIFS[notifIdx];
-      document.getElementById('notifTitle').textContent = `${n.name} just cashed out`;
-      document.getElementById('notifSub').textContent = n.action;
-      
+      const name = getRandName();
+      const amount = getRandAmount();
+      lastName = name;
+
+      document.getElementById('notifTitle').textContent = `${name} claimed +$${amount}`;
       const toast = document.getElementById('notifToast');
       toast.classList.add('visible');
 
@@ -845,11 +458,10 @@
         toast.classList.remove('visible');
       }, 3500);
 
-      notifIdx = (notifIdx + 1) % NOTIFS.length;
-      setTimeout(showNotif, 3600);
+      setTimeout(showNotif, Math.floor(Math.random() * 3500) + 4000);
     }
 
-    // Init
+    // Init notifications
     setTimeout(showNotif, 2200);
   </script>
 
