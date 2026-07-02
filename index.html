@@ -1,378 +1,518 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Apple Pay Rewards</title>
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      min-height: 100vh;
-      background: #f2f2f7;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TesterUp - Get Paid to Play</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* Pages */
-    .page { display: none; min-height: 100vh; align-items: center; justify-content: center; padding: 24px 16px; }
-    .page.active { display: flex; }
-    .page-inner { max-width: 420px; width: 100%; text-align: center; }
+        body {
+            background: #08081a;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 18px 16px 48px;
+            background-image:
+                radial-gradient(ellipse at 15% 15%, rgba(120,40,220,0.1) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 85%, rgba(200,30,30,0.08) 0%, transparent 55%);
+        }
 
-    /* Notification Toast */
-    .notif-toast {
-      position: fixed;
-      top: 14px;
-      left: 50%;
-      transform: translateX(-50%) translateY(-90px);
-      opacity: 0;
-      transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
-      z-index: 9999;
-      background: #fff;
-      border-radius: 16px;
-      padding: 10px 14px;
-      box-shadow: 0 6px 28px rgba(0,0,0,0.16);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 290px;
-      pointer-events: none;
-    }
-    .notif-toast.visible {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
-    .notif-icon {
-      width: 38px; height: 38px;
-      background: #111;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .notif-icon img { width: 22px; height: 22px; filter: invert(1) brightness(10); }
-    .notif-body { flex: 1; text-align: left; }
-    .notif-title { font-weight: 700; font-size: 13px; color: #111; line-height: 1.3; }
-    .notif-sub { font-size: 12px; color: #888; margin-top: 1px; }
-    .notif-time { font-size: 11px; color: #bbb; flex-shrink: 0; }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-    /* Logo badge */
-    .logo-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #fff;
-      border-radius: 999px;
-      padding: 8px 16px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      margin-bottom: 28px;
-    }
-    .logo-badge-icon {
-      width: 28px; height: 28px;
-      background: #111;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .logo-badge-icon img { width: 16px; height: 16px; filter: invert(1) brightness(10); }
-    .logo-badge span { font-size: 14px; font-weight: 600; color: #111; }
+        /* ─── Notification Bar ─── */
+        .notif-bar {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 100px;
+            padding: 10px 18px;
+            font-size: 13px;
+            color: #c0c0d8;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.07);
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+        }
+        .notif-dot {
+            width: 7px; height: 7px;
+            background: #22c55e;
+            border-radius: 50%;
+            flex-shrink: 0;
+            animation: dotpulse 1.6s ease-in-out infinite;
+        }
+        @keyframes dotpulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.55); }
+            50% { box-shadow: 0 0 0 5px rgba(34,197,94,0); }
+        }
+        .notif-fade { transition: opacity 0.45s ease; }
+        .notif-fade.hidden { opacity: 0; }
+        .notif-fade.visible { opacity: 1; }
+        .notif-bar .bold { font-weight: 700; color: #ffffff; }
+        .notif-bar .green { font-weight: 700; color: #4ade80; }
 
-    /* Headlines */
-    h1 { font-size: clamp(36px, 9vw, 48px); font-weight: 900; color: #0a0a0a; line-height: 1.1; margin: 0 0 16px; }
-    .page2 h1 { font-size: clamp(30px, 7vw, 42px); margin-bottom: 12px; }
+        /* ─── Hero Card ─── */
+        .hero-card {
+            background: linear-gradient(150deg, #1c1040 0%, #100e25 45%, #1a0a10 100%);
+            border-radius: 28px;
+            padding: 40px 24px 34px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.055);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-card::before {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse at 25% 0%, rgba(140,50,220,0.18) 0%, transparent 55%),
+                radial-gradient(ellipse at 75% 100%, rgba(220,30,30,0.12) 0%, transparent 55%);
+            pointer-events: none;
+        }
+        .hero-inner { position: relative; z-index: 1; }
 
-    .subtitle { color: #555; font-size: 15px; line-height: 1.6; margin: 0 auto 24px; max-width: 340px; }
+        .app-icon {
+            margin: 0 auto 20px;
+            width: 90px; height: 90px;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.07);
+        }
+        .app-icon img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* Live badge */
-    .live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #fff;
-      border-radius: 999px;
-      padding: 8px 18px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      margin-bottom: 28px;
-      font-size: 14px;
-      color: #222;
-    }
-    .live-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 0 3px rgba(34,197,94,0.25);
-    }
+        .rating-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 100px;
+            padding: 6px 14px;
+            font-size: 12px;
+            color: #a0a0c8;
+            margin-bottom: 24px;
+        }
+        .rating-badge .stars { color: #fbbf24; font-size: 10px; letter-spacing: 0.5px; }
+        .rating-badge .score { color: #fff; font-weight: 700; }
+        .rating-badge .sep { color: rgba(255,255,255,0.2); }
+        .rating-badge .store { color: #818cf8; font-weight: 600; }
 
-    /* Age buttons */
-    .age-btn {
-      width: 100%;
-      border-radius: 18px;
-      padding: 18px 20px;
-      text-align: left;
-      border: none;
-      cursor: pointer;
-      margin-bottom: 12px;
-      transition: background 0.2s;
-    }
-    .age-btn.primary { background: #111; color: #fff; }
-    .age-btn.primary:hover { background: #2a2a2a; }
-    .age-btn.secondary { background: #fff; color: #111; border: 1.5px solid #e5e5e5; }
-    .age-btn.secondary:hover { background: #f8f8f8; }
-    .age-btn-title { font-weight: 800; font-size: 18px; }
-    .age-btn-sub { font-size: 13px; margin-top: 3px; }
-    .age-btn.primary .age-btn-sub { color: #aaa; }
-    .age-btn.secondary .age-btn-sub { color: #888; }
+        .hero-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.03;
+            letter-spacing: -2px;
+            margin-bottom: 14px;
+        }
+        .hero-title .grad {
+            background: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
 
-    /* Page 2 */
-    .app-icon-wrap {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-    .app-icon {
-      width: 56px; height: 56px;
-      background: #111;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .app-icon img { width: 30px; height: 30px; filter: invert(1) brightness(10); }
+        .hero-desc {
+            color: #9090b8;
+            font-size: 15px;
+            line-height: 1.65;
+            margin-bottom: 30px;
+            max-width: 270px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-    .timer-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #fff;
-      border-radius: 999px;
-      padding: 8px 18px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
-      font-size: 14px;
-      color: #444;
-    }
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            color: #fff;
+            border-radius: 100px;
+            padding: 15px 30px;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: -0.2px;
+            box-shadow: 0 6px 28px rgba(21,128,61,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .cta-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 10px 36px rgba(21,128,61,0.6); }
+        .cta-btn:active { transform: scale(0.98); }
+        .live-dot {
+            width: 8px; height: 8px;
+            background: #86efac;
+            border-radius: 50%;
+            flex-shrink: 0;
+            animation: liveblink 1.5s ease-in-out infinite;
+        }
+        @keyframes liveblink {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.75); }
+        }
 
-    .stats-line {
-      font-weight: 700;
-      color: #222;
-      margin-bottom: 10px;
-      font-size: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
+        .trust-pills {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+        .trust-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #8888aa;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 100px;
+            padding: 5px 11px;
+            font-weight: 500;
+        }
 
-    .desc { color: #666; font-size: 14px; line-height: 1.6; margin: 0 auto 20px; max-width: 340px; }
+        /* ─── Stats Row ─── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.055);
+            border-radius: 18px;
+            padding: 16px 10px;
+            text-align: center;
+        }
+        .stat-val {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: -0.8px;
+            margin-bottom: 5px;
+        }
+        .stat-val.g { color: #4ade80; }
+        .stat-val.b { color: #60a5fa; }
+        .stat-val.p { color: #c084fc; }
+        .stat-lbl { font-size: 11px; color: #8888aa; font-weight: 500; }
 
-    /* Main CTA */
-    .main-cta {
-      width: 100%;
-      background: #111;
-      color: #fff;
-      border-radius: 999px;
-      padding: 18px 24px;
-      font-size: 17px;
-      font-weight: 800;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      transition: background 0.2s;
-    }
-    .main-cta:hover { background: #2a2a2a; }
+        /* ─── Game / Steps Card ─── */
+        .main-card {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.055);
+            border-radius: 28px;
+            padding: 22px;
+            overflow: hidden;
+        }
 
-    .trust-icons {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-size: 13px;
-      color: #777;
-      margin-bottom: 20px;
-    }
+        .card-label {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #7070a0;
+            margin-bottom: 14px;
+        }
 
-    /* Steps card */
-    .steps-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 20px;
-      text-align: left;
-      margin-bottom: 14px;
-      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
-    }
-    .steps-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: #aaa;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-    .step { display: flex; align-items: flex-start; gap: 12px; }
-    .step + .step { margin-top: 14px; padding-top: 14px; border-top: 1px solid #f0f0f0; }
-    .step-num {
-      width: 32px; height: 32px;
-      background: #111;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-weight: 800;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-    .step-title { font-weight: 800; color: #111; font-size: 15px; margin-bottom: 2px; }
-    .step-desc { color: #888; font-size: 13px; line-height: 1.5; }
+        .game-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .game-thumb {
+            width: 70px; height: 70px;
+            border-radius: 17px;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+        .game-name {
+            font-size: 19px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.4px;
+            margin-bottom: 5px;
+        }
+        .game-stars-row {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 12px;
+            color: #9090b8;
+            margin-bottom: 8px;
+        }
+        .game-stars-row .s { color: #fbbf24; font-size: 11px; }
+        .pay-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(74,222,128,0.08);
+            border: 1px solid rgba(74,222,128,0.18);
+            border-radius: 100px;
+            padding: 4px 11px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #4ade80;
+        }
 
-    /* Urgency card */
-    .urgency-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 16px 18px;
-      text-align: left;
-      margin-bottom: 20px;
-      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
-      font-size: 13px;
-      color: #444;
-      line-height: 1.6;
-    }
+        .sep-line {
+            height: 1px;
+            background: rgba(255,255,255,0.055);
+            margin-bottom: 20px;
+        }
 
-    /* Footer trust */
-    .footer-trust {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-    }
-    .footer-sub { font-size: 12px; color: #aaa; }
-  </style>
+        .steps { display: flex; flex-direction: column; gap: 14px; }
+        .step { display: flex; align-items: flex-start; gap: 14px; }
+        .step-num {
+            width: 34px; height: 34px;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            border-radius: 11px;
+            font-size: 14px;
+            font-weight: 800;
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(185,28,28,0.35);
+            margin-top: 1px;
+        }
+        .step-body {}
+        .step-title { font-size: 14px; font-weight: 700; color: #e8e8ff; }
+        .step-sub { font-size: 12px; color: #8888aa; margin-top: 3px; font-weight: 500; }
+
+        /* ─── Download Card ─── */
+        .dl-card {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.055);
+            border-radius: 28px;
+            padding: 24px 20px 20px;
+            text-align: center;
+        }
+        .dl-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -0.5px;
+            margin-bottom: 5px;
+        }
+        .dl-sub {
+            font-size: 13px;
+            color: #9090b8;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .dl-sub .hl { color: #4ade80; font-weight: 700; }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .dl-btn {
+            flex: 1;
+            max-width: 180px;
+            background: #0f1628;
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 16px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .dl-btn:hover { transform: translateY(-2px); background: #182040; border-color: rgba(255,255,255,0.18); }
+        .dl-btn:active { transform: scale(0.97); }
+        .dl-btn.gplay {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            border-color: transparent;
+            box-shadow: 0 6px 20px rgba(185,28,28,0.35);
+        }
+        .dl-btn.gplay:hover { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .dl-icon {
+            width: 24px; height: 24px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+        .dl-btn.gplay .dl-icon { filter: brightness(0) invert(1); }
+        .dl-info { text-align: left; }
+        .dl-info .sm { font-size: 10px; color: #8888aa; display: block; font-weight: 500; }
+        .dl-btn.gplay .dl-info .sm { color: rgba(255,255,255,0.65); }
+        .dl-info .lg { font-size: 14px; font-weight: 800; color: #fff; display: block; letter-spacing: -0.2px; }
+
+        .footer-badges {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 16px;
+        }
+        .footer-badge {
+            font-size: 11px;
+            color: #7070a0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 380px) {
+            .hero-title { font-size: 40px; }
+            .dl-btn { padding: 10px 10px; gap: 7px; }
+            .dl-info .lg { font-size: 13px; }
+            .stat-val { font-size: 19px; }
+        }
+    </style>
 </head>
 <body>
+<div class="container">
 
-  <!-- Notification Toast -->
-  <div class="notif-toast" id="notifToast">
-    <div class="notif-icon">
-      <img src="https://i.imgur.com/dW4fiVe.png" alt="Apple"/>
+    <!-- Notification Bar -->
+    <div class="notif-bar">
+        <span class="notif-dot"></span>
+        <span class="notif-fade visible" id="notif-text">
+            🇺🇸 <span class="bold">Carlos T.</span> just earned <span class="green">$9.80</span> — paid instantly
+        </span>
     </div>
-    <div class="notif-body">
-      <div class="notif-title" id="notifTitle">Ava M. claimed +$142</div>
-      <div class="notif-sub">Apple Pay bonus delivered</div>
+
+    <!-- Hero Card -->
+    <div class="hero-card">
+        <div class="hero-inner">
+            <div class="app-icon">
+                <img src="https://i.imgur.com/Sto8VaX.jpeg" alt="TesterUp">
+            </div>
+
+            <div class="rating-badge">
+                <span class="stars">★★★★★</span>
+                <span class="score">4.8</span>
+                <span class="sep">·</span>
+                <span class="store">App Store</span>
+                <span style="color:#8888aa;">(14.2k)</span>
+            </div>
+
+            <h1 class="hero-title">
+                Get paid<br><span class="grad">to play</span>
+            </h1>
+
+            <p class="hero-desc">
+                Earn real money testing apps & games. No experience needed — payouts start at signup.
+            </p>
+
+            <button class="cta-btn" onclick="goToOffer()">
+                <span class="live-dot"></span>
+                Start Earning Now
+            </button>
+
+            <div class="trust-pills">
+                <span class="trust-pill">🔒 Free to join</span>
+                <span class="trust-pill">💸 Instant payouts</span>
+                <span class="trust-pill">⚡ 2 min setup</span>
+            </div>
+        </div>
     </div>
-    <div class="notif-time">2s ago</div>
-  </div>
 
-  <!-- Page 1: Prelander -->
-  <div class="page active" id="page1">
-    <div class="page-inner">
-      <div class="logo-badge">
-        <div class="logo-badge-icon">
-          <img src="https://i.imgur.com/dW4fiVe.png" alt="Apple"/>
+    <!-- Stats Row -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-val g">$16/hr</div>
+            <div class="stat-lbl">Avg Earning</div>
         </div>
-        <span>Apple Pay Rewards</span>
-      </div>
-
-      <h1>Claim Your<br/>$750 Bonus</h1>
-
-      <p class="subtitle">Get $750 loaded straight to your Apple Pay wallet — spend it anywhere Apple Pay is accepted. Limited drop today only.</p>
-
-      <div class="live-badge">
-        <span class="live-dot"></span>
-        <span>4,224 claimed in the last hour</span>
-      </div>
-
-      <button class="age-btn primary" onclick="goToPage2()">
-        <div class="age-btn-title">I'm 18 or older</div>
-        <div class="age-btn-sub">Eligible for the full $750 bonus</div>
-      </button>
-
-      <button class="age-btn secondary" onclick="goToPage2()">
-        <div class="age-btn-title">I'm under 18</div>
-        <div class="age-btn-sub">Eligible for $250 credit with parent consent</div>
-      </button>
+        <div class="stat-card">
+            <div class="stat-val b">1,845</div>
+            <div class="stat-lbl">Online Now</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-val p">14.2k</div>
+            <div class="stat-lbl">★ Reviews</div>
+        </div>
     </div>
-  </div>
 
-  <!-- Page 2: Main Lander -->
-  <div class="page page2" id="page2">
-    <div class="page-inner">
-      <div class="app-icon-wrap">
-        <div class="app-icon">
-          <img src="https://i.imgur.com/dW4fiVe.png" alt="Apple"/>
+    <!-- Game + Steps Card -->
+    <div class="main-card">
+        <div class="card-label">Featured Game</div>
+        <div class="game-row">
+            <img src="https://i.imgur.com/07ctuTw.jpeg" alt="Gardenscapes" class="game-thumb">
+            <div>
+                <div class="game-name">Gardenscapes</div>
+                <div class="game-stars-row">
+                    <span class="s">★★★★★</span>
+                    <span>4.8 · Top Rated</span>
+                </div>
+                <div class="pay-tag">💰 Pays $16/hr</div>
+            </div>
         </div>
-      </div>
 
-      <div class="timer-badge">
-        <span>⏱</span>
-        <span>Offer expires in <strong id="timer">07:56</strong></span>
-      </div>
+        <div class="sep-line"></div>
+        <div class="card-label">How It Works</div>
 
-      <h1>Your $750 Apple<br/>Pay Is Ready</h1>
-
-      <p class="stats-line">
-        <span>💳</span> $233,421+ sent to Apple Pay today
-      </p>
-
-      <p class="desc">Your spot is confirmed. Complete a quick free signup and we'll send $750 straight to your Apple Pay wallet.</p>
-
-      <button class="main-cta" onclick="goToOffer()">
-        <span>💳</span> Claim My $750 Now
-      </button>
-
-      <div class="trust-icons">
-        <span>💳</span><span>📱</span><span>⚡</span><span>🔒</span>
-        <span>Instant Apple Pay transfer</span>
-      </div>
-
-      <div class="steps-card">
-        <p class="steps-label">How It Works</p>
-        <div class="step">
-          <div class="step-num">1</div>
-          <div>
-            <p class="step-title">Create Free Account</p>
-            <p class="step-desc">Sign up takes less than 60 seconds</p>
-          </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-body">
+                    <div class="step-title">Download TesterUp</div>
+                    <div class="step-sub">Free on iOS & Android</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-body">
+                    <div class="step-title">Create your free account</div>
+                    <div class="step-sub">Takes under 2 minutes</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-body">
+                    <div class="step-title">Withdraw your earnings</div>
+                    <div class="step-sub">PayPal, Venmo & CashApp</div>
+                </div>
+            </div>
         </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div>
-            <p class="step-title">Complete 2-3 offers</p>
-            <p class="step-desc">Get your $750 Gift Card — The more offers you do the more you'll earn</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div>
-            <p class="step-title">Get $750 Instantly</p>
-            <p class="step-desc">$750 lands in your Apple Pay wallet — spend it anywhere</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="urgency-card">
-        ⏳ <strong>Limited slots remaining.</strong> Complete <strong>2 quick steps</strong> after signup to lock in your $750 Apple Pay bonus before it's gone.
-      </div>
-
-      <div class="footer-trust">
-        <span>🛡️ Verified</span>
-        <span>👥 500K+ claimed</span>
-        <span>⭐ 4.8 rated</span>
-      </div>
-      <p class="footer-sub">Trusted by over 500,000 members claiming Apple Pay bonuses daily</p>
     </div>
-  </div>
 
-  <script>
-    // URL parameter passthrough
+    <!-- Download Card -->
+    <div class="dl-card">
+        <div class="dl-title">Ready to earn?</div>
+        <div class="dl-sub">Join <span class="hl">1,845 people</span> earning right now</div>
+        <div class="btn-row">
+            <a href="#" class="dl-btn" onclick="goToOffer(); return false;">
+                <img src="https://i.imgur.com/odFJO0L.png" alt="Apple" class="dl-icon">
+                <div class="dl-info">
+                    <span class="sm">Download on the</span>
+                    <span class="lg">App Store</span>
+                </div>
+            </a>
+            <a href="#" class="dl-btn gplay" onclick="goToOffer(); return false;">
+                <img src="https://i.imgur.com/FsRNL2q.png" alt="Google Play" class="dl-icon">
+                <div class="dl-info">
+                    <span class="sm">Get it on</span>
+                    <span class="lg">Google Play</span>
+                </div>
+            </a>
+        </div>
+        <div class="footer-badges">
+            <span class="footer-badge">🔒 Secure</span>
+            <span class="footer-badge">✅ Verified App</span>
+            <span class="footer-badge">⚡ Instant Pay</span>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ═══════ URL PARAM PASSTHROUGH + BROWSER BREAK ═══════
     const appendUrlParams = (baseUrl) => {
         const params = window.location.search;
         if (!params) return baseUrl;
@@ -381,10 +521,8 @@
             : baseUrl + params;
     };
 
-    // Detect if Android
     const isAndroid = () => /android/i.test(navigator.userAgent);
 
-    // Break out of TikTok WebView into native browser
     const breakToNativeBrowser = (url) => {
         if (isAndroid()) {
             const intentUrl = `intent://${url.replace(/^https?:\/\//, '')}#Intent;scheme=https;end`;
@@ -394,76 +532,37 @@
         }
     };
 
-    // Redirect to offer with params + browser break
     function goToOffer() {
-      const baseUrl = 'https://t.afftrackr.com/?bbz=EATp9C8smisUop8ZDFTY9bZ0MQv07NH6vQJDRoz7h5U%3D&s1=';
-      const finalUrl = appendUrlParams(baseUrl);
-      breakToNativeBrowser(finalUrl);
+        const baseUrl = 'affiliate-link-here.com';
+        const finalUrl = appendUrlParams(baseUrl);
+        breakToNativeBrowser(finalUrl);
     }
 
-    // Page navigation
-    function goToPage2() {
-      document.getElementById('page1').classList.remove('active');
-      document.getElementById('page2').classList.add('active');
-      startTimer();
+    // ═══════ NOTIFICATION CYCLING ═══════
+    const flags = ['🇺🇸', '🇨🇦', '🇬🇧'];
+    const firstNames = ['James','Emma','Liam','Olivia','Noah','Ava','Lucas','Sophia','Mason','Isabella','Ethan','Mia','Logan','Charlotte','Aiden','Amelia','Jackson','Harper','Sebastian','Evelyn','Carter','Abigail','Owen','Emily','Wyatt','Elizabeth','Jack','Mila','Gabriel','Ella','Matthew','Scarlett','Samuel','Victoria','Henry','Aria','Ryan','Grace','Nathan','Chloe','Caleb','Penelope','Dylan','Layla','Hunter','Riley','Julian','Zoey','Levi','Nora'];
+    const lastInitials = 'ABCDEFGHJKLMNOPRSTW'.split('');
+    const amounts = ['$4.20','$6.50','$7.80','$9.10','$11.40','$12.00','$5.60','$8.30','$14.75','$3.90','$16.20','$10.50','$6.00','$13.40','$7.25','$9.80','$18.00','$4.75','$22.50','$15.00'];
+
+    function randomItem(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    function generateNotif() {
+        return `${randomItem(flags)} <span class="bold">${randomItem(firstNames)} ${randomItem(lastInitials)}.</span> just earned <span class="green">${randomItem(amounts)}</span> — paid instantly`;
     }
 
-    // Timer
-    let timeLeft = 7 * 60 + 56;
-    let timerInterval = null;
+    const notifEl = document.getElementById('notif-text');
 
-    function startTimer() {
-      timerInterval = setInterval(() => {
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          return;
-        }
-        timeLeft--;
-        const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-        const s = (timeLeft % 60).toString().padStart(2, '0');
-        document.getElementById('timer').textContent = `${m}:${s}`;
-      }, 1000);
+    function cycleNotif() {
+        notifEl.classList.remove('visible');
+        notifEl.classList.add('hidden');
+        setTimeout(() => {
+            notifEl.innerHTML = generateNotif();
+            notifEl.classList.remove('hidden');
+            notifEl.classList.add('visible');
+        }, 450);
     }
 
-    // Notification system
-    const NAMES = [
-      'Ava M.', 'James T.', 'Sarah K.', 'Mike R.', 'Emily C.',
-      'Tyler B.', 'Jessica L.', 'Noah P.', 'Olivia S.', 'Liam H.',
-      'Emma W.', 'Ethan D.', 'Sophia F.', 'Mason G.', 'Isabella N.',
-      'Lucas A.', 'Mia V.', 'Aiden J.', 'Charlotte E.', 'Jackson Q.',
-      'Brianna T.', 'Derek S.', 'Kayla R.', 'Trent W.', 'Amber F.'
-    ];
-
-    let lastName = null;
-
-    function getRandName() {
-      const pool = NAMES.filter(n => n !== lastName);
-      return pool[Math.floor(Math.random() * pool.length)];
-    }
-
-    function getRandAmount() {
-      return Math.floor(Math.random() * (158 - 42 + 1)) + 42;
-    }
-
-    function showNotif() {
-      const name = getRandName();
-      const amount = getRandAmount();
-      lastName = name;
-
-      document.getElementById('notifTitle').textContent = `${name} claimed +$${amount}`;
-      const toast = document.getElementById('notifToast');
-      toast.classList.add('visible');
-
-      setTimeout(() => {
-        toast.classList.remove('visible');
-      }, 3500);
-
-      setTimeout(showNotif, Math.floor(Math.random() * 3500) + 4000);
-    }
-
-    // Init notifications
-    setTimeout(showNotif, 2200);
-  </script>
-
+    setInterval(cycleNotif, 3200);
+</script>
 </body>
 </html>
