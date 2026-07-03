@@ -554,7 +554,6 @@
         .sticky-bar.visible {
             transform: translateY(0);
         }
-        /* Red glow line along the top */
         .sticky-bar::before {
             content: '';
             position: absolute;
@@ -572,7 +571,6 @@
             gap: 10px;
         }
 
-        /* Progress row inside sticky bar */
         .sticky-progress-row {
             display: flex;
             align-items: center;
@@ -610,7 +608,6 @@
             flex-shrink: 0;
         }
 
-        /* Big CTA button */
         .sticky-cta {
             display: flex;
             align-items: center;
@@ -652,7 +649,6 @@
             flex-shrink: 0;
         }
 
-        /* Trust mini row */
         .sticky-trust {
             display: flex;
             align-items: center;
@@ -795,10 +791,10 @@
             <div class="unlock-progress-wrap">
                 <div class="unlock-progress-top">
                     <span class="unlock-progress-label">Your Progress</span>
-                    <span class="unlock-progress-count" id="prog-count">0 / 2 complete</span>
+                    <span class="unlock-progress-count">0 / 2 complete</span>
                 </div>
                 <div class="progress-track">
-                    <div class="progress-fill" id="prog-fill"></div>
+                    <div class="progress-fill"></div>
                 </div>
             </div>
 
@@ -877,9 +873,9 @@
         <div class="sticky-progress-row">
             <span class="sticky-prog-label">Progress</span>
             <div class="sticky-prog-track">
-                <div class="sticky-prog-fill" id="sticky-prog-fill"></div>
+                <div class="sticky-prog-fill"></div>
             </div>
-            <span class="sticky-prog-count" id="sticky-prog-count">0 / 2 complete</span>
+            <span class="sticky-prog-count">0 / 2 complete</span>
         </div>
         <button class="sticky-cta" onclick="goToOffer()">
             <span>Start Earning — Install Free</span>
@@ -943,43 +939,18 @@
 
     /* ── Sticky bar: show after scrolling 80px ── */
     const stickyBar = document.getElementById('sticky-bar');
-    const stickyProgFill = document.getElementById('sticky-prog-fill');
-    const stickyProgCount = document.getElementById('sticky-prog-count');
-
     let stickyShown = false;
-    let progAnimated = false;
 
     window.addEventListener('scroll', () => {
         const scrollY = window.scrollY || window.pageYOffset;
-
-        /* Show sticky bar after 80px scroll */
         if (scrollY > 80 && !stickyShown) {
             stickyShown = true;
             stickyBar.classList.add('visible');
-            /* Animate sticky progress bar */
-            setTimeout(() => {
-                stickyProgFill.style.width = '50%';
-                stickyProgCount.textContent = '1 / 2 complete';
-            }, 300);
         } else if (scrollY <= 80 && stickyShown) {
             stickyShown = false;
             stickyBar.classList.remove('visible');
         }
     });
-
-    /* ── Inline unlock card progress bar (IntersectionObserver) ── */
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !progAnimated) {
-                progAnimated = true;
-                setTimeout(() => {
-                    document.getElementById('prog-fill').style.width = '50%';
-                    document.getElementById('prog-count').textContent = '1 / 2 complete';
-                }, 400);
-            }
-        });
-    }, { threshold: 0.3 });
-    observer.observe(document.getElementById('unlock-card'));
 </script>
 </body>
 </html>
