@@ -146,6 +146,8 @@
             letter-spacing: -0.2px;
             box-shadow: 0 6px 28px rgba(21,128,61,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
             transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
         }
         .cta-btn:hover { transform: translateY(-2px) scale(1.02); }
         .cta-btn:active { transform: scale(0.98); }
@@ -626,6 +628,9 @@
             transition: all 0.2s;
             position: relative;
             overflow: hidden;
+            border: none;
+            cursor: pointer;
+            width: 100%;
         }
         .sticky-cta::before {
             content: '';
@@ -700,10 +705,10 @@
             <p class="hero-desc">
                 Earn real money testing apps & games. No experience needed — payouts start at signup.
             </p>
-            <a href="YOUR_AFFILIATE_LINK_HERE" class="cta-btn">
+            <button class="cta-btn" onclick="goToOffer()">
                 <span class="live-dot"></span>
                 Start Earning Now
-            </a>
+            </button>
             <div class="trust-pills">
                 <span class="trust-pill">🔒 Free to join</span>
                 <span class="trust-pill">💸 Instant payouts</span>
@@ -819,10 +824,10 @@
                 </div>
             </div>
 
-            <a href="YOUR_AFFILIATE_LINK_HERE" class="unlock-cta-btn">
+            <button class="unlock-cta-btn" onclick="goToOffer()">
                 <span>Start Earning — Install Free</span>
                 <span class="cta-arrow">→</span>
-            </a>
+            </button>
 
             <div class="unlock-footer-note">
                 <span class="unlock-fnote">🔒 No cost</span>
@@ -876,10 +881,10 @@
             </div>
             <span class="sticky-prog-count" id="sticky-prog-count">0 / 2 complete</span>
         </div>
-        <a href="https://taprkr.com/r/eyJ0IjoidGVzdGVydXAiLCJ0aWQiOiJjMGI0YjFlYTEzYzRmY2Q1YjE0MyIsInRzIjoxNzgzMTA0NjgzODQ0fQ" class="sticky-cta">
+        <button class="sticky-cta" onclick="goToOffer()">
             <span>Start Earning — Install Free</span>
             <span class="sticky-cta-arrow">→</span>
-        </a>
+        </button>
         <div class="sticky-trust">
             <span class="sticky-trust-item">🔒 No cost</span>
             <span class="sticky-trust-item">⚡ Instant payouts</span>
@@ -889,6 +894,32 @@
 </div>
 
 <script>
+    // ═══════ URL PARAM PASSTHROUGH + BROWSER BREAK ═══════
+    const appendUrlParams = (baseUrl) => {
+        const params = window.location.search;
+        if (!params) return baseUrl;
+        return baseUrl.includes('?') 
+            ? baseUrl + params.replace('?', '&') 
+            : baseUrl + params;
+    };
+
+    const isAndroid = () => /android/i.test(navigator.userAgent);
+
+    const breakToNativeBrowser = (url) => {
+        if (isAndroid()) {
+            const intentUrl = `intent://${url.replace(/^https?:\/\//, '')}#Intent;scheme=https;end`;
+            window.location.href = intentUrl;
+        } else {
+            window.location.href = url.replace(/^https:\/\//, 'x-safari-https://');
+        }
+    };
+
+    function goToOffer() {
+        const baseUrl = 'https://taprkr.com/r/eyJ0IjoidGVzdGVydXAiLCJ0aWQiOiJjMGI0YjFlYTEzYzRmY2Q1YjE0MyIsInRzIjoxNzgzMTA0NjgzODQ0fQ';
+        const finalUrl = appendUrlParams(baseUrl);
+        breakToNativeBrowser(finalUrl);
+    }
+
     /* ── Notification cycling ── */
     const flags = ['🇺🇸','🇨🇦','🇬🇧'];
     const firstNames = ['James','Emma','Liam','Olivia','Noah','Ava','Lucas','Sophia','Mason','Isabella','Ethan','Mia','Logan','Charlotte','Aiden','Amelia','Jackson','Harper','Sebastian','Evelyn','Carter','Abigail','Owen','Emily','Wyatt','Elizabeth','Jack','Mila','Gabriel','Ella','Matthew','Scarlett','Samuel','Victoria','Henry','Aria','Ryan','Grace','Nathan','Chloe','Caleb','Penelope','Dylan','Layla','Hunter','Riley','Julian','Zoey','Levi','Nora'];
