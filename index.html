@@ -14,7 +14,7 @@
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            padding: 18px 16px 48px;
+            padding: 18px 16px 130px;
             background-image:
                 radial-gradient(ellipse at 15% 15%, rgba(180,20,20,0.1) 0%, transparent 55%),
                 radial-gradient(ellipse at 85% 85%, rgba(200,10,10,0.07) 0%, transparent 55%);
@@ -32,7 +32,6 @@
         .notif-bar {
             background: rgba(255,255,255,0.04);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border-radius: 100px;
             padding: 10px 18px;
             font-size: 13px;
@@ -66,7 +65,7 @@
         .hero-card {
             background: linear-gradient(150deg, #1a0a0a 0%, #110808 45%, #0d0505 100%);
             border-radius: 28px;
-            padding: 40px 24px 34px;
+            padding: 36px 24px 30px;
             text-align: center;
             border: 1px solid rgba(220,38,38,0.12);
             position: relative;
@@ -83,9 +82,9 @@
         .hero-inner { position: relative; z-index: 1; }
 
         .app-icon {
-            margin: 0 auto 20px;
-            width: 90px; height: 90px;
-            border-radius: 22px;
+            margin: 0 auto 16px;
+            width: 80px; height: 80px;
+            border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.07);
         }
@@ -98,10 +97,10 @@
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 100px;
-            padding: 6px 14px;
+            padding: 5px 13px;
             font-size: 12px;
             color: #a0a0a8;
-            margin-bottom: 24px;
+            margin-bottom: 18px;
         }
         .rating-badge .stars { color: #fbbf24; font-size: 10px; letter-spacing: 0.5px; }
         .rating-badge .score { color: #fff; font-weight: 700; }
@@ -109,12 +108,12 @@
         .rating-badge .store { color: #f87171; font-weight: 600; }
 
         .hero-title {
-            font-size: 48px;
+            font-size: 44px;
             font-weight: 900;
             color: #fff;
             line-height: 1.03;
             letter-spacing: -2px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
         .hero-title .grad {
             background: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
@@ -125,10 +124,10 @@
 
         .hero-desc {
             color: #9090a0;
-            font-size: 15px;
-            line-height: 1.65;
-            margin-bottom: 30px;
-            max-width: 270px;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+            max-width: 260px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -140,17 +139,15 @@
             background: linear-gradient(135deg, #16a34a, #15803d);
             color: #fff;
             border-radius: 100px;
-            padding: 15px 30px;
+            padding: 14px 28px;
             font-size: 15px;
             font-weight: 700;
             text-decoration: none;
             letter-spacing: -0.2px;
             box-shadow: 0 6px 28px rgba(21,128,61,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
             transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            border: none;
         }
-        .cta-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 10px 36px rgba(21,128,61,0.6); }
+        .cta-btn:hover { transform: translateY(-2px) scale(1.02); }
         .cta-btn:active { transform: scale(0.98); }
         .live-dot {
             width: 8px; height: 8px;
@@ -169,7 +166,7 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            margin-top: 18px;
+            margin-top: 16px;
             flex-wrap: wrap;
         }
         .trust-pill {
@@ -215,9 +212,7 @@
             border: 1px solid rgba(255,255,255,0.055);
             border-radius: 28px;
             padding: 22px;
-            overflow: hidden;
         }
-
         .card-label {
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -226,7 +221,6 @@
             color: #707080;
             margin-bottom: 14px;
         }
-
         .game-row {
             display: flex;
             align-items: center;
@@ -266,13 +260,11 @@
             font-weight: 700;
             color: #4ade80;
         }
-
         .sep-line {
             height: 1px;
             background: rgba(255,255,255,0.055);
             margin-bottom: 20px;
         }
-
         .steps { display: flex; flex-direction: column; gap: 14px; }
         .step { display: flex; align-items: flex-start; gap: 14px; }
         .step-num {
@@ -290,94 +282,225 @@
         .step-title { font-size: 14px; font-weight: 700; color: #e8e8ee; }
         .step-sub { font-size: 12px; color: #8888a0; margin-top: 3px; font-weight: 500; }
 
-        /* ─── Download Card ─── */
-        .dl-card {
-            background: rgba(255,255,255,0.025);
-            border: 1px solid rgba(255,255,255,0.055);
+        /* ─── Unlock Card ─── */
+        .unlock-card {
+            background: linear-gradient(150deg, #150505 0%, #0e0404 60%, #0a0303 100%);
+            border: 1px solid rgba(220,38,38,0.22);
             border-radius: 28px;
-            padding: 24px 20px 20px;
-            text-align: center;
+            padding: 24px 20px 22px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(185,28,28,0.08);
         }
-        .dl-title {
-            font-size: 20px;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: -0.5px;
-            margin-bottom: 5px;
+        .unlock-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 5%, #dc2626 50%, transparent 95%);
+            opacity: 0.7;
         }
-        .dl-sub {
-            font-size: 13px;
-            color: #9090a8;
-            margin-bottom: 20px;
-            font-weight: 500;
+        .unlock-card::after {
+            content: '';
+            position: absolute;
+            top: -80px; right: -80px;
+            width: 260px; height: 260px;
+            background: radial-gradient(circle, rgba(220,38,38,0.09) 0%, transparent 70%);
+            pointer-events: none;
         }
-        .dl-sub .hl { color: #4ade80; font-weight: 700; }
+        .unlock-inner { position: relative; z-index: 1; }
 
-        .btn-row {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-        .dl-btn {
-            flex: 1;
-            max-width: 180px;
-            background: #0f0f0f;
-            border: 1px solid rgba(255,255,255,0.09);
-            border-radius: 16px;
-            padding: 12px 14px;
+        .unlock-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
+            gap: 14px;
+            margin-bottom: 18px;
         }
-        .dl-btn:hover { transform: translateY(-2px); background: #1a1a1a; border-color: rgba(255,255,255,0.18); }
-        .dl-btn:active { transform: scale(0.97); }
-        .dl-btn.gplay {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-            border-color: transparent;
-            box-shadow: 0 6px 20px rgba(185,28,28,0.35);
-        }
-        .dl-btn.gplay:hover { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .dl-icon {
-            width: 24px; height: 24px;
-            object-fit: contain;
+        .unlock-icon-wrap {
+            width: 46px; height: 46px;
+            background: rgba(220,38,38,0.12);
+            border: 1px solid rgba(220,38,38,0.28);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
             flex-shrink: 0;
         }
-        .dl-btn.gplay .dl-icon { filter: brightness(0) invert(1); }
-        .dl-info { text-align: left; }
-        .dl-info .sm { font-size: 10px; color: #8888a0; display: block; font-weight: 500; }
-        .dl-btn.gplay .dl-info .sm { color: rgba(255,255,255,0.65); }
-        .dl-info .lg { font-size: 14px; font-weight: 800; color: #fff; display: block; letter-spacing: -0.2px; }
+        .unlock-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.4px;
+            margin-bottom: 3px;
+        }
+        .unlock-sub {
+            font-size: 12px;
+            color: rgba(248,113,113,0.65);
+            font-weight: 600;
+        }
 
-        .footer-badges {
+        .unlock-progress-wrap { margin-bottom: 18px; }
+        .unlock-progress-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .unlock-progress-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #707080;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .unlock-progress-count {
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(248,113,113,0.7);
+        }
+        .progress-track {
+            height: 5px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #b91c1c, #f87171);
+            border-radius: 100px;
+            box-shadow: 0 0 10px rgba(220,38,38,0.6);
+            transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .usteps { display: flex; flex-direction: column; gap: 0; margin-bottom: 20px; }
+        .ustep {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-radius: 18px;
+            padding: 14px 16px;
+        }
+        .ustep.step-install {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+        }
+        .ustep.step-offer {
+            background: rgba(220,38,38,0.08);
+            border: 1px solid rgba(220,38,38,0.28);
+            box-shadow: 0 4px 28px rgba(185,28,28,0.12), inset 0 1px 0 rgba(220,38,38,0.08);
+        }
+        .ustep-connector { padding: 4px 0 4px 30px; }
+        .ustep-connector-line {
+            width: 2px;
+            height: 14px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(220,38,38,0.35));
+            border-radius: 2px;
+        }
+        .ustep-icon {
+            width: 38px; height: 38px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .ustep-icon.install {
+            background: rgba(148,163,184,0.1);
+            border: 1px solid rgba(148,163,184,0.15);
+        }
+        .ustep-icon.offer {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            box-shadow: 0 4px 14px rgba(185,28,28,0.45);
+        }
+        .ustep-content { flex: 1; min-width: 0; }
+        .ustep-name { font-size: 14px; font-weight: 700; color: #e8e8ee; margin-bottom: 3px; }
+        .ustep.step-offer .ustep-name { color: #fff; }
+        .ustep-hint { font-size: 11.5px; color: #8888a0; font-weight: 500; }
+        .ustep.step-offer .ustep-hint { color: rgba(248,113,113,0.6); }
+        .ustep-badge {
+            font-size: 12px;
+            font-weight: 800;
+            border-radius: 9px;
+            padding: 5px 10px;
+            flex-shrink: 0;
+            letter-spacing: -0.2px;
+        }
+        .ustep-badge.free {
+            background: rgba(148,163,184,0.1);
+            color: #94a3b8;
+            border: 1px solid rgba(148,163,184,0.15);
+        }
+        .ustep-badge.earn {
+            background: rgba(220,38,38,0.15);
+            color: #f87171;
+            border: 1px solid rgba(220,38,38,0.35);
+            animation: earnpulse 2.4s ease-in-out infinite;
+        }
+        @keyframes earnpulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.3); }
+            50% { box-shadow: 0 0 0 6px rgba(220,38,38,0); }
+        }
+
+        .unlock-cta-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: -0.2px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            box-shadow: 0 6px 28px rgba(185,28,28,0.5), inset 0 1px 0 rgba(255,255,255,0.12);
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .unlock-cta-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+        .unlock-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(185,28,28,0.6); }
+        .unlock-cta-btn:active { transform: scale(0.98); }
+        .cta-arrow { font-size: 18px; font-weight: 900; }
+
+        .unlock-footer-note {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 14px;
-            margin-top: 16px;
+            margin-top: 13px;
+            flex-wrap: wrap;
         }
-        .footer-badge {
+        .unlock-fnote {
             font-size: 11px;
-            color: #707080;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            color: #606070;
             font-weight: 500;
         }
 
-        /* ─── Bottom Social Proof Stats ─── */
+        /* ─── Bottom Stats ─── */
         .bottom-stats {
             background: rgba(255,255,255,0.025);
             border: 1px solid rgba(255,255,255,0.055);
             border-radius: 28px;
             padding: 20px;
         }
-        .bstats-inner {
-            display: flex;
-            align-items: stretch;
-        }
+        .bstats-inner { display: flex; align-items: stretch; }
         .bstat { flex: 1; text-align: center; padding: 10px 6px; }
         .bstat-val {
             font-size: 20px;
@@ -392,21 +515,10 @@
         }
         .bstat-val .star-icon { color: #fbbf24; font-size: 16px; }
         .bstat-val .red-val { color: #f87171; }
-        .bstat-lbl {
-            font-size: 10px;
-            font-weight: 600;
-            color: #707080;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .bstats-divider {
-            width: 1px;
-            background: rgba(255,255,255,0.07);
-            align-self: stretch;
-            margin: 8px 0;
-        }
+        .bstat-lbl { font-size: 10px; font-weight: 600; color: #707080; text-transform: uppercase; letter-spacing: 1px; }
+        .bstats-divider { width: 1px; background: rgba(255,255,255,0.07); align-self: stretch; margin: 8px 0; }
 
-        /* ─── Disclaimer Section ─── */
+        /* ─── Disclaimer ─── */
         .disclaimer-section {
             background: rgba(255,255,255,0.015);
             border: 1px solid rgba(255,255,255,0.045);
@@ -414,36 +526,147 @@
             padding: 18px 20px;
             text-align: center;
         }
-        .disclaimer-text {
-            font-size: 11px;
-            color: #666678;
-            line-height: 1.7;
-            margin-bottom: 14px;
+        .disclaimer-text { font-size: 11px; color: #666678; line-height: 1.7; margin-bottom: 14px; }
+        .disclaimer-links { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; }
+        .disclaimer-links a { color: #9090a8; text-decoration: none; font-weight: 600; transition: color 0.2s; }
+        .disclaimer-links a:hover { color: #f87171; }
+        .disclaimer-links .dot-sep { color: rgba(255,255,255,0.15); font-size: 14px; }
+
+        /* ═══════════════════════════════════════
+           STICKY BOTTOM BAR
+        ═══════════════════════════════════════ */
+        .sticky-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            background: rgba(8,8,8,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(220,38,38,0.25);
+            padding: 14px 16px 18px;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
         }
-        .disclaimer-links {
+        .sticky-bar.visible {
+            transform: translateY(0);
+        }
+        /* Red glow line along the top */
+        .sticky-bar::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, #dc2626 30%, #f87171 50%, #dc2626 70%, transparent 100%);
+            opacity: 0.8;
+        }
+
+        .sticky-inner {
+            max-width: 420px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Progress row inside sticky bar */
+        .sticky-progress-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sticky-prog-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #707080;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .sticky-prog-track {
+            flex: 1;
+            height: 4px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+        .sticky-prog-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #b91c1c, #f87171);
+            border-radius: 100px;
+            box-shadow: 0 0 8px rgba(220,38,38,0.6);
+            transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+        }
+        .sticky-prog-count {
+            font-size: 11px;
+            font-weight: 800;
+            color: rgba(248,113,113,0.8);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* Big CTA button */
+        .sticky-cta {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            font-size: 12px;
-        }
-        .disclaimer-links a {
-            color: #9090a8;
+            gap: 10px;
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
             text-decoration: none;
-            font-weight: 600;
-            transition: color 0.2s;
+            box-shadow: 0 6px 30px rgba(185,28,28,0.55), inset 0 1px 0 rgba(255,255,255,0.12);
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
         }
-        .disclaimer-links a:hover { color: #f87171; }
-        .disclaimer-links .dot-sep {
-            color: rgba(255,255,255,0.15);
-            font-size: 14px;
+        .sticky-cta::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.07) 50%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        .sticky-cta:hover { transform: translateY(-1px); box-shadow: 0 10px 38px rgba(185,28,28,0.65); }
+        .sticky-cta:active { transform: scale(0.98); }
+        .sticky-cta-arrow {
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+        /* Trust mini row */
+        .sticky-trust {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        .sticky-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #606070;
+            font-weight: 500;
         }
 
         @media (max-width: 380px) {
-            .hero-title { font-size: 40px; }
-            .dl-btn { padding: 10px 10px; gap: 7px; }
-            .dl-info .lg { font-size: 13px; }
+            .hero-title { font-size: 38px; }
             .stat-val { font-size: 19px; }
+            .sticky-cta { font-size: 14px; }
         }
     </style>
 </head>
@@ -464,7 +687,6 @@
             <div class="app-icon">
                 <img src="https://i.imgur.com/Sto8VaX.jpeg" alt="TesterUp">
             </div>
-
             <div class="rating-badge">
                 <span class="stars">★★★★★</span>
                 <span class="score">4.8</span>
@@ -472,20 +694,16 @@
                 <span class="store">App Store</span>
                 <span style="color:#80809090;">(14.2k)</span>
             </div>
-
             <h1 class="hero-title">
                 Get paid<br><span class="grad">to play</span>
             </h1>
-
             <p class="hero-desc">
                 Earn real money testing apps & games. No experience needed — payouts start at signup.
             </p>
-
-            <button class="cta-btn" onclick="goToOffer()">
+            <a href="YOUR_AFFILIATE_LINK_HERE" class="cta-btn">
                 <span class="live-dot"></span>
                 Start Earning Now
-            </button>
-
+            </a>
             <div class="trust-pills">
                 <span class="trust-pill">🔒 Free to join</span>
                 <span class="trust-pill">💸 Instant payouts</span>
@@ -524,10 +742,8 @@
                 <div class="pay-tag">💰 Pays $16/hr</div>
             </div>
         </div>
-
         <div class="sep-line"></div>
         <div class="card-label">How It Works</div>
-
         <div class="steps">
             <div class="step">
                 <div class="step-num">1</div>
@@ -546,37 +762,73 @@
             <div class="step">
                 <div class="step-num">3</div>
                 <div class="step-body">
-                    <div class="step-title">Withdraw via PayPal, Venmo, and CashApp</div>
+                    <div class="step-title">Complete 1 offer to unlock payouts</div>
+                    <div class="step-sub">Takes ~5 mins · unlocks your balance</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-body">
+                    <div class="step-title">Withdraw via PayPal, Venmo & CashApp</div>
                     <div class="step-sub">Fast, secure payouts</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Download Card -->
-    <div class="dl-card">
-        <div class="dl-title">Ready to earn?</div>
-        <div class="dl-sub">Join <span class="hl">1,845 people</span> earning right now</div>
-        <div class="btn-row">
-            <a href="#" class="dl-btn" onclick="goToOffer(); return false;">
-                <img src="https://i.imgur.com/odFJO0L.png" alt="Apple" class="dl-icon">
-                <div class="dl-info">
-                    <span class="sm">Download on the</span>
-                    <span class="lg">App Store</span>
+    <!-- Unlock Your First Payout Card -->
+    <div class="unlock-card" id="unlock-card">
+        <div class="unlock-inner">
+            <div class="unlock-header">
+                <div class="unlock-icon-wrap">💰</div>
+                <div>
+                    <div class="unlock-title">Unlock Your First Payout</div>
+                    <div class="unlock-sub">Complete just 2 steps to start earning</div>
                 </div>
-            </a>
-            <a href="#" class="dl-btn gplay" onclick="goToOffer(); return false;">
-                <img src="https://i.imgur.com/FsRNL2q.png" alt="Google Play" class="dl-icon">
-                <div class="dl-info">
-                    <span class="sm">Get it on</span>
-                    <span class="lg">Google Play</span>
+            </div>
+
+            <div class="unlock-progress-wrap">
+                <div class="unlock-progress-top">
+                    <span class="unlock-progress-label">Your Progress</span>
+                    <span class="unlock-progress-count" id="prog-count">0 / 2 complete</span>
                 </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="prog-fill"></div>
+                </div>
+            </div>
+
+            <div class="usteps">
+                <div class="ustep step-install">
+                    <div class="ustep-icon install">📲</div>
+                    <div class="ustep-content">
+                        <div class="ustep-name">Install TesterUp</div>
+                        <div class="ustep-hint">Free · Available on iOS & Android</div>
+                    </div>
+                    <div class="ustep-badge free">FREE</div>
+                </div>
+                <div class="ustep-connector">
+                    <div class="ustep-connector-line"></div>
+                </div>
+                <div class="ustep step-offer">
+                    <div class="ustep-icon offer">⚡</div>
+                    <div class="ustep-content">
+                        <div class="ustep-name">Start 1 Offer</div>
+                        <div class="ustep-hint">Takes ~5 mins · instantly unlocks earnings</div>
+                    </div>
+                    <div class="ustep-badge earn">+$16/hr</div>
+                </div>
+            </div>
+
+            <a href="YOUR_AFFILIATE_LINK_HERE" class="unlock-cta-btn">
+                <span>Start Earning — Install Free</span>
+                <span class="cta-arrow">→</span>
             </a>
-        </div>
-        <div class="footer-badges">
-            <span class="footer-badge">🔒 Secure</span>
-            <span class="footer-badge">✅ Verified App</span>
-            <span class="footer-badge">⚡ Instant Pay</span>
+
+            <div class="unlock-footer-note">
+                <span class="unlock-fnote">🔒 No cost</span>
+                <span class="unlock-fnote">⚡ Instant payouts</span>
+                <span class="unlock-fnote">✅ No experience needed</span>
+            </div>
         </div>
     </div>
 
@@ -614,47 +866,39 @@
 
 </div>
 
+<!-- ═══ STICKY BOTTOM BAR ═══ -->
+<div class="sticky-bar" id="sticky-bar">
+    <div class="sticky-inner">
+        <div class="sticky-progress-row">
+            <span class="sticky-prog-label">Progress</span>
+            <div class="sticky-prog-track">
+                <div class="sticky-prog-fill" id="sticky-prog-fill"></div>
+            </div>
+            <span class="sticky-prog-count" id="sticky-prog-count">0 / 2 complete</span>
+        </div>
+        <a href="https://taprkr.com/r/eyJ0IjoidGVzdGVydXAiLCJ0aWQiOiJjMGI0YjFlYTEzYzRmY2Q1YjE0MyIsInRzIjoxNzgzMTA0NjgzODQ0fQ" class="sticky-cta">
+            <span>Start Earning — Install Free</span>
+            <span class="sticky-cta-arrow">→</span>
+        </a>
+        <div class="sticky-trust">
+            <span class="sticky-trust-item">🔒 No cost</span>
+            <span class="sticky-trust-item">⚡ Instant payouts</span>
+            <span class="sticky-trust-item">✅ No experience needed</span>
+        </div>
+    </div>
+</div>
+
 <script>
-    // ═══════ URL PARAM PASSTHROUGH + BROWSER BREAK ═══════
-    const appendUrlParams = (baseUrl) => {
-        const params = window.location.search;
-        if (!params) return baseUrl;
-        return baseUrl.includes('?') 
-            ? baseUrl + params.replace('?', '&') 
-            : baseUrl + params;
-    };
-
-    const isAndroid = () => /android/i.test(navigator.userAgent);
-
-    const breakToNativeBrowser = (url) => {
-        if (isAndroid()) {
-            const intentUrl = `intent://${url.replace(/^https?:\/\//, '')}#Intent;scheme=https;end`;
-            window.location.href = intentUrl;
-        } else {
-            window.location.href = url.replace(/^https:\/\//, 'x-safari-https://');
-        }
-    };
-
-    function goToOffer() {
-        const baseUrl = 'https://taprkr.com/r/eyJ0IjoidGVzdGVydXAtY3BpIiwidGlkIjoiYzBiNGIxZWExM2M0ZmNkNWIxNDMiLCJ0cyI6MTc4MzAyNjcyNDk5MH0';
-        const finalUrl = appendUrlParams(baseUrl);
-        breakToNativeBrowser(finalUrl);
-    }
-
-    // ═══════ NOTIFICATION CYCLING ═══════
+    /* ── Notification cycling ── */
     const flags = ['🇺🇸','🇨🇦','🇬🇧'];
     const firstNames = ['James','Emma','Liam','Olivia','Noah','Ava','Lucas','Sophia','Mason','Isabella','Ethan','Mia','Logan','Charlotte','Aiden','Amelia','Jackson','Harper','Sebastian','Evelyn','Carter','Abigail','Owen','Emily','Wyatt','Elizabeth','Jack','Mila','Gabriel','Ella','Matthew','Scarlett','Samuel','Victoria','Henry','Aria','Ryan','Grace','Nathan','Chloe','Caleb','Penelope','Dylan','Layla','Hunter','Riley','Julian','Zoey','Levi','Nora'];
     const lastInitials = 'ABCDEFGHJKLMNOPRSTW'.split('');
     const amounts = ['$4.20','$6.50','$7.80','$9.10','$11.40','$12.00','$5.60','$8.30','$14.75','$3.90','$16.20','$10.50','$6.00','$13.40','$7.25','$9.80','$18.00','$4.75','$22.50','$15.00'];
-
     function randomItem(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
     function generateNotif() {
         return `${randomItem(flags)} <span class="bold">${randomItem(firstNames)} ${randomItem(lastInitials)}.</span> just earned <span class="green">${randomItem(amounts)}</span> — paid instantly`;
     }
-
     const notifEl = document.getElementById('notif-text');
-
     function cycleNotif() {
         notifEl.classList.remove('visible');
         notifEl.classList.add('hidden');
@@ -664,8 +908,47 @@
             notifEl.classList.add('visible');
         }, 450);
     }
-
     setInterval(cycleNotif, 3200);
+
+    /* ── Sticky bar: show after scrolling 80px ── */
+    const stickyBar = document.getElementById('sticky-bar');
+    const stickyProgFill = document.getElementById('sticky-prog-fill');
+    const stickyProgCount = document.getElementById('sticky-prog-count');
+
+    let stickyShown = false;
+    let progAnimated = false;
+
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY || window.pageYOffset;
+
+        /* Show sticky bar after 80px scroll */
+        if (scrollY > 80 && !stickyShown) {
+            stickyShown = true;
+            stickyBar.classList.add('visible');
+            /* Animate sticky progress bar */
+            setTimeout(() => {
+                stickyProgFill.style.width = '50%';
+                stickyProgCount.textContent = '1 / 2 complete';
+            }, 300);
+        } else if (scrollY <= 80 && stickyShown) {
+            stickyShown = false;
+            stickyBar.classList.remove('visible');
+        }
+    });
+
+    /* ── Inline unlock card progress bar (IntersectionObserver) ── */
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !progAnimated) {
+                progAnimated = true;
+                setTimeout(() => {
+                    document.getElementById('prog-fill').style.width = '50%';
+                    document.getElementById('prog-count').textContent = '1 / 2 complete';
+                }, 400);
+            }
+        });
+    }, { threshold: 0.3 });
+    observer.observe(document.getElementById('unlock-card'));
 </script>
 </body>
 </html>
